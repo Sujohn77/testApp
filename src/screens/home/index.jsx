@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import tw from 'twrnc';
-import { LinearGradient } from 'expo-linear-gradient';
+import LinearGradient from 'react-native-linear-gradient';
 import GradientButton from '../../layout/buttons/GradientButton';
 
 const navIcons = [
@@ -19,7 +19,7 @@ const navIcons = [
   require('../../../public/imgs/help.png'),
 ];
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({navigation}) => {
   const [activeMenuItem, setActiveMenuItem] = useState(2);
   // const [fontsLoaded, fontError] = useFonts({
   //     InterRegular: require('../../../assets/fonts/Inter-Regular.ttf'),
@@ -32,8 +32,7 @@ const HomeScreen = ({ navigation }) => {
       <View
         key={key}
         style={tw.style('relative py-1')}
-        onTouchEnd={() => setActiveMenuItem(key)}
-      >
+        onTouchEnd={() => setActiveMenuItem(key)}>
         {isActive && (
           <LinearGradient
             colors={['#50FB00', '#2C8A00']}
@@ -55,19 +54,11 @@ const HomeScreen = ({ navigation }) => {
     <SafeAreaView style={layoutStyles.container}>
       <View>
         <ImageBackground
-          source={require('../../../public/imgs/banner.png')}
-          // eslint-disable-next-line react-native/no-inline-styles
-          style={{
-            position: 'relative',
-            paddingBottom: 0,
-            marginBottom: 0,
-          }}
-        >
-          <View style={tw` pt-10 relative flex items-center h-full px-2`}>
+          source={require('../../../public/images/preloader.png')}>
+          <View style={tw`pt-10 relative flex items-center h-full px-2`}>
             <View style={tw`grow`}>
               <Text
-                style={tw`text-white text-3xl text-center uppercase font-bold`}
-              >
+                style={tw`text-white text-3xl text-center uppercase font-bold`}>
                 Take the 5 min quiz
               </Text>
               <Text style={tw`text-white text-2xl text-center mt-3 `}>
@@ -83,8 +74,7 @@ const HomeScreen = ({ navigation }) => {
             />
           </View>
           <View
-            style={tw`flex flex-row justify-around absolute bottom-0 bg-cyan-500 w-full py-2`}
-          >
+            style={tw`flex flex-row justify-around absolute bottom-0 bg-cyan-500 w-full py-2`}>
             {menuItems}
           </View>
         </ImageBackground>
@@ -138,7 +128,7 @@ const layoutStyles = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
-  linearGradient: { paddingLeft: 15, paddingRight: 15, borderRadius: 5 },
+  linearGradient: {paddingLeft: 15, paddingRight: 15, borderRadius: 5},
   buttonText: {
     fontSize: 18,
     fontFamily: 'Gill Sans',

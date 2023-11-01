@@ -1,21 +1,35 @@
 import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import QuizScreen from './src/screens/quiz/Quiz';
 
-// import {NavigationContainer} from '@react-navigation/native';
+import CryptoListingScreen from './src/screens/crypto';
 
-// import {createNativeStackNavigator} from '@react-navigation/native-stack';
-// import QuizScreen from './screens/quizz/Quiz';
+import HomeScreen from './src/screens/home';
+import {QueryClient, QueryClientProvider} from 'react-query';
 
-// import CryptoListingScreen from './screens/crypto';
-// const Stack = createNativeStackNavigator();
-// import {QueryClient, QueryClientProvider} from 'react-query';
-import {Text, View} from 'react-native';
-
-// const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 const App = () => {
+  const Stack = createNativeStackNavigator();
+
   return (
-    <View>
-      <Text>test</Text>
-    </View>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen name="Crypto" component={CryptoListingScreen} />
+          <Stack.Screen
+            name="Quiz"
+            component={QuizScreen}
+            options={{headerShown: true}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 };
 

@@ -1,16 +1,15 @@
-import { Button, StyleSheet, TouchableOpacity } from 'react-native';
+import {Button, StyleSheet, TouchableOpacity} from 'react-native';
 
 import React from 'react';
 import tw from 'twrnc';
-import { LinearGradient } from 'expo-linear-gradient';
+import LinearGradient from 'react-native-linear-gradient';
 import DefaultButton from '../DefaultButton';
 
-const GradientButton = ({ name, route, colors, style, navigation }) => {
+const GradientButton = ({name, route, colors, style, navigation}) => {
   return (
     <LinearGradient
       colors={colors}
-      style={tw`uppercase grow-0 text-white text-center w-[300px] mb-[120px] text-3xl font-semibold rounded-lg text-white`}
-    >
+      style={tw`uppercase grow-0 text-white text-center w-[300px] mb-[120px] text-3xl font-semibold rounded-lg text-white`}>
       <DefaultButton
         title={name}
         onPress={() => navigation.navigate(route)}
