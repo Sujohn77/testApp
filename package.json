@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator='iPhone 15 Pro' ",
     "lint": "eslint .",
     "start": "react-native start --port=8082",
     "test": "jest"
@@ -21,6 +21,7 @@
     "react-native-linear-gradient": "^2.8.3",
     "react-native-safe-area-context": "^4.7.4",
     "react-native-screens": "^3.27.0",
+    "react-native-svg": "^13.14.0",
     "react-native-webview": "^13.6.2",
     "react-query": "^3.39.3",
     "twrnc": "^3.6.4"
