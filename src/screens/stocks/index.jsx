@@ -1,51 +1,64 @@
 import React, {useState, useEffect} from 'react';
 import {useQuery} from 'react-query';
 import tw from 'twrnc';
-import {fetchCryptoPrices} from '../../api/marketData';
-import {ActivityIndicator, ImageBackground, Text, View} from 'react-native';
-import FullSizeChart from '../../components/chart/FullSizeChart';
+import {
+  fetchCryptoByDate,
+  fetchCryptoPrices,
+  fetchStockPrices,
+} from '../../api/marketData';
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  ImageBackground,
+  Text,
+  View,
+} from 'react-native';
+// import FullSizeChart from '../../components/chart/FullSizeChart';
 import Header from '../../components/header';
-import images from '../../../public/images';
-import {stockGraph} from '../../constants';
-import {isObject} from 'twrnc/dist/esm/types';
+import images from '../../images';
+import {cryptoList, currency, stockGraph} from '../../constants';
 
-const chartData = [
-  {value: 3},
-  {value: 6},
-  {value: 5},
-  {value: 9},
-  {value: 11},
-  {value: 18},
-  {value: 15.5},
-  {value: 16},
-  {value: 24},
-  {value: 25},
-  {value: 20},
-  {value: 21},
-  {value: 24},
-  {value: 26},
-  {value: 30},
-  {value: 35},
-  {value: 33},
-  {value: 32},
-  {value: 36},
-  {value: 38},
-  {value: 45},
-  {value: 50},
-  {value: 54},
-  {value: 57},
-  {value: 59},
-  {value: 60},
-  {value: 61},
-  {value: 61.5},
-  {value: 61.75},
-  {value: 61.85},
-  {value: 62},
-  {value: 62.1},
-  {value: 59},
-  {value: 60},
-  {value: 61},
-];
+import cryptoImages from '../../images/crypto';
+import FullSizeChart from '../../components/chart/FullSizeChart';
+
+// const chartData = [
+//   {value: 3},
+//   {value: 6},
+//   {value: 5},
+//   {value: 9},
+//   {value: 11},
+//   {value: 18},
+//   {value: 15.5},
+//   {value: 16},
+//   {value: 24},
+//   {value: 25},
+//   {value: 20},
+//   {value: 21},
+//   {value: 24},
+//   {value: 26},
+//   {value: 30},
+//   {value: 35},
+//   {value: 33},
+//   {value: 32},
+//   {value: 36},
+//   {value: 38},
+//   {value: 45},
+//   {value: 50},
+//   {value: 54},
+//   {value: 57},
+//   {value: 59},
+//   {value: 60},
+//   {value: 61},
+//   {value: 61.5},
+//   {value: 61.75},
+//   {value: 61.85},
+//   {value: 62},
+//   {value: 62.1},
+//   {value: 59},
+//   {value: 60},
+//   {value: 61},
+// ];
 
 const mock = {
   'Meta Data': {
@@ -67,16 +80,22 @@ const mock = {
 };
 
 const StocksScreen = () => {
-  const {data, isLoading} = useQuery('fetchMarketData', fetchCryptoPrices);
+  const {data, isLoading} = useQuery('fetchMarketData', () =>
+    fetchStockPrices(stockGraph),
+  );
+  const {data: cryptoData} = useQuery('fetchCryptoPrices', fetchCryptoPrices);
+  const {data: cryptoDayBefore} = useQuery(
+    'fetchCryptoByDate',
+    fetchCryptoByDate,
+  );
 
-  const dailyStocksData = data ? Object.values(data)[1] : undefined;
-  const datasets = dailyStocksData
-    ? Object.values(Object.values(dailyStocksData)[1]).map(item => ({
-        value: Object.values(item)[0],
-      }))
-    : [];
+  // const datasets = dailyStocksData
+  //   ? Object.values(Object.values(dailyStocksData)[1]).map(item => ({
+  //       value: Object.values(item)[0],
+  //     }))
+  //   : [];
 
-  if (isLoading) {
+  if (isLoading || !Object.keys(cryptoData)?.length) {
     return (
       <View style={tw`mt-8`}>
         <ActivityIndicator />
@@ -87,11 +106,14 @@ const StocksScreen = () => {
 
   return (
     <View style={tw`relative mt-8 mx-8 py-5`}>
-      {/* {datasets.length && <FullSizeChart data={datasets} symbol={stockGraph} />} */}
+      <FullSizeChart
+        data={data.o.map(value => ({value}))}
+        symbol={stockGraph}
+      />
       <Text style={tw`text-2xl text-black font-semibold mb-3`}>
         Information block
       </Text>
-      <View style={tw`overflow-hidden rounded-lg shadow-2xl`}>
+      <View style={tw`overflow-hidden rounded-lg shadow-2xl mb-3`}>
         <ImageBackground
           source={images.textBanner}
           style={{
@@ -111,13 +133,48 @@ const StocksScreen = () => {
       <Text style={tw`text-2xl text-black font-semibold mb-3`}>
         Stocks Prices
       </Text>
-      <View style={tw`h-20 p-4 w-full rounded-md bg-[#6070ff41]`}></View>
-      {/* {data.map((item, key) => (
-        <View style={tw`flex flex-row gap-2`} key={key}>
-          <Text>{item.symbol} </Text>
-          <Text>{item.price}</Text>
-        </View>
-      ))} */}
+      <Text style={tw`text-2xl text-black font-semibold mb-3`}>
+        Cryptocurrency Prices
+      </Text>
+      {/* {Object.keys(cryptoData).map((key, index) => {
+        const price = cryptoData[key][currency];
+        const yesterdayPrice = cryptoDayBefore ? cryptoDayBefore[key] : 0;
+        const percentageDiff = (price / yesterdayPrice - 1) * 100;
+        const isGrowth = percentageDiff > 0;
+        const percentageSign = isGrowth ? '+' : '';
+
+        return (
+          <View
+            style={tw`h-16 p-3 w-full flex flex-row gap-2 mb-3 rounded-md bg-[#6070ff41]`}
+            key={key}>
+            <Image source={cryptoImages[key]} style={tw`w-10 h-10 shrink-0`} />
+            <View style={tw`flex-1`}>
+              <View style={tw`flex flex-row justify-between w-max `}>
+                <Text style={tw`font-semibold text-sm`}>
+                  {cryptoList[key].title}
+                </Text>
+                <Text style={tw`font-semibold text-sm w-min `}>
+                  ${cryptoData[key][currency]}
+                </Text>
+              </View>
+              <View style={tw`flex flex-row justify-between gap-2`}>
+                <Text style={tw`text-slate-500 text-xs`}>
+                  {cryptoList[key].subTitle}
+                </Text>
+                {cryptoDayBefore[key] && (
+                  <Text
+                    style={tw`${
+                      isGrowth ? 'text-lime-500' : 'text-rose-300'
+                    } text-xs`}>
+                    {percentageSign}
+                    {percentageDiff.toFixed(2)}%
+                  </Text>
+                )}
+              </View>
+            </View>
+          </View>
+        );
+      })} */}
     </View>
   );
 };

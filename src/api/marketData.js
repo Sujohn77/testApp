@@ -19,9 +19,9 @@ import moment from 'moment';
 //   return value;
 // }
 
-export const fetchStockPrices = async () => {
+export const fetchStockPrices = async ({stock = 'AAPL'}) => {
   const response = await fetch(
-    `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&&apikey=C0NJN8SJDJ8FL1MZ&symbol=AAPL&interval=60m`,
+    `https://api.marketdata.app/v1/stocks/candles/daily/${stock}?to=today&countback=100`,
   );
 
   return response.json();
@@ -38,19 +38,21 @@ export const fetchCryptoPrices = async () => {
 };
 
 export const fetchCryptoByDate = async ({
-  date = moment().subtract(1, 'days').format('dd-mm-YYYY'), // Yesterday date
+  date = moment().subtract(1, 'days').format('DD-MM-YYYY'), // Yesterday date
 }) => {
   let coinData = [];
-  const cryptoIds = Object.keys(cryptoList).join(',');
-  for (let index = 0; index < cryptoList.length; index++) {
+
+  const cryptoIds = Object.keys(cryptoList);
+  for (let index = 0; index < cryptoIds.length; index++) {
     const coin = cryptoIds[index];
     const response = await fetch(
       `https://api.coingecko.com/api/v3/coins/${coin}/history?date=${date}`,
     );
     const data = await response.json();
+
     coinData = {
       ...coinData,
-      [coin] : data.market_data.current_price[currency]
+      [coin]: data.market_data.current_price[currency] || {},
     };
   }
 

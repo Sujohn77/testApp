@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import WebView from 'react-native-webview';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Alert} from 'react-native';
 
 const defaultQuizUrl = 'https://en.wikipedia.org/wiki/Main_Page';
 const QuizScreen = () => {
@@ -24,6 +23,7 @@ const QuizScreen = () => {
     }
   };
   console.log(quizUrl);
+
   return (
     <WebView
       onNavigationStateChange={data => {
