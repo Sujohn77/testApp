@@ -87,7 +87,7 @@ const StocksScreen = () => {
 
   return (
     <View style={tw`relative mt-8 mx-8 py-5`}>
-      {datasets.length && <FullSizeChart data={datasets} symbol={stockGraph} />}
+      {/* {datasets.length && <FullSizeChart data={datasets} symbol={stockGraph} />} */}
       <Text style={tw`text-2xl text-black font-semibold mb-3`}>
         Information block
       </Text>

@@ -1,11 +1,10 @@
-import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import QuizScreen from './src/screens/quiz/Quiz';
+import QuizScreen from './screens/quiz/Quiz';
 
-import StocksScreen from './src/screens/stocks';
+import StocksScreen from './screens/stocks';
 import {QueryClient, QueryClientProvider} from 'react-query';
-import Header from './src/components/header';
+import Header from './components/header';
 
 const queryClient = new QueryClient();
 const App = () => {
