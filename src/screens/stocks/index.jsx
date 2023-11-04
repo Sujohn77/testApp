@@ -80,34 +80,25 @@ const mock = {
 };
 
 const StocksScreen = () => {
-  const {data, isLoading} = useQuery('fetchMarketData', () =>
-    fetchStockPrices(stockGraph),
-  );
+  const {data, isLoading} = useQuery('fetchMarketData', fetchStockPrices);
   const {data: cryptoData} = useQuery('fetchCryptoPrices', fetchCryptoPrices);
   const {data: cryptoDayBefore} = useQuery(
     'fetchCryptoByDate',
     fetchCryptoByDate,
   );
 
-  // const datasets = dailyStocksData
-  //   ? Object.values(Object.values(dailyStocksData)[1]).map(item => ({
-  //       value: Object.values(item)[0],
-  //     }))
-  //   : [];
-
-  if (isLoading || !Object.keys(cryptoData)?.length) {
+  if (isLoading || !Object.keys(data)?.length) {
     return (
       <View style={tw`mt-8`}>
         <ActivityIndicator />
       </View>
     );
   }
-  // Alert.alert('test', 'msg');
 
   return (
     <View style={tw`relative mt-8 mx-8 py-5`}>
       <FullSizeChart
-        data={data.o.map(value => ({value}))}
+        data={data?.o?.map(value => ({value}))}
         symbol={stockGraph}
       />
       <Text style={tw`text-2xl text-black font-semibold mb-3`}>

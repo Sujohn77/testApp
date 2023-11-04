@@ -40,21 +40,28 @@ export const fetchCryptoPrices = async () => {
 export const fetchCryptoByDate = async ({
   date = moment().subtract(1, 'days').format('DD-MM-YYYY'), // Yesterday date
 }) => {
-  let coinData = [];
+  let coinData = {};
 
   const cryptoIds = Object.keys(cryptoList);
-  for (let index = 0; index < cryptoIds.length; index++) {
-    const coin = cryptoIds[index];
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${coin}/history?date=${date}`,
-    );
-    const data = await response.json();
 
-    coinData = {
-      ...coinData,
-      [coin]: data.market_data.current_price[currency] || {},
-    };
+  try {
+    for (let index = 0; index < cryptoIds.length; index++) {
+      const coin = cryptoIds[index];
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/coins/${coin}/history?date=${date}`,
+      );
+      const data = await response.json();
+      if (data) {
+        coinData = {
+          ...coinData,
+          [coin]: data.market_data.current_price[currency] || {},
+        };
+      }
+    }
+  } catch (error) {
+    console.log(error);
   }
+  const a = Object.keys(coinData).length;
 
   return coinData;
 };
