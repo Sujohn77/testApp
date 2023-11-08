@@ -12,10 +12,10 @@ import {
 } from 'react-native';
 // import FullSizeChart from '../../components/chart/FullSizeChart';
 import Header from '../../components/header';
-import images from '../../images';
+import images from '../../assets/images';
 import {stockGraph, stocksIds, stocksList} from '../../constants';
 
-import cryptoImages from '../../images/crypto';
+import cryptoImages from '../../assets/images/crypto';
 import FullSizeChart from '../../components/chart/FullSizeChart';
 
 // const chartData = [183, 182, 186.5, 184];
@@ -86,6 +86,7 @@ const StocksScreen = () => {
       <Text style={tw`text-2xl text-black font-semibold mb-3`}>
         Cryptocurrency Prices
       </Text>
+      <Menu activeIndex={1} />
       {/* {data &&
         stocksIds.map((key, index) => {
           const price = data[key];

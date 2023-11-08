@@ -64,10 +64,18 @@ export const crosswords = [
   ['r', 'v', 'a', 'n', 'v', 'y', 'b', 'a', 'r', 'r', 'e', 't'],
   ['i', 'a', 'l', 'g', 'o', 'r', 'i', 't', 'h', 'm', 's', 'a'],
   ['n', 'r', 'y', 'f', 'i', 'n', 'e', 't', 'g', 'u', 'b', 'k'],
-  ['g', 'h', 's', 't', 'p', 'r', 'e', 'c', 'i', 's', 'i', 'l'],
+  ['g', 'h', 's', 'p', 'r', 'e', 'c', 'i', 's', 'i', 'o', 'n'],
   ['s', 'a', 'i', 'e', 'd', 'o', 'o', 'i', 'l', 'i', 'l', 'e'],
-  ['w', 'u', 's', 'as', 'f', 'o', 'r', 'e', 'x', 's', 'y', 'i'],
+  ['w', 'u', 's', 'a', 'f', 'o', 'r', 'e', 'x', 's', 'y', 'i'],
   ['w', 'g', 'a', 'n', 'a', 'l', 'y', 's', 'i', 's', 'z', 'x'],
+];
+export const crosswordQuestions = [
+  'Role of AI in stock selection?',
+  "AI's contribution to investment?",
+  'What are robo-advisors?',
+  'What does AI enhance in investment planning?',
+  'What do AI algorithms process for stock analysis?',
+  'What is a major market for currency exchange?',
 ];
 export const searchWords = [
   'data',

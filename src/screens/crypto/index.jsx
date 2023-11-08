@@ -19,7 +19,7 @@ import Header from '../../components/header';
 
 import {cryptoList, currency, stockGraph} from '../../constants';
 
-import cryptoImages from '../../images/crypto';
+import cryptoImages from '../../assets/images/crypto';
 import FullSizeChart from '../../components/chart/FullSizeChart';
 import images from '../../../public/images';
 
