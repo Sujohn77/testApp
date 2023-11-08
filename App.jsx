@@ -5,6 +5,8 @@ import QuizScreen from './src/screens/quiz/Quiz';
 import StocksScreen from './src/screens/stocks';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import Header from './src/components/header';
+import WordSearch from './src/screens/wordSearch';
+import HomeScreen from './src/screens/home';
 
 const queryClient = new QueryClient();
 const App = () => {
@@ -14,23 +16,30 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Stocks"
+          initialRouteName="WordSearch"
           screenOptions={{
             header: ({route}) => <Header name={route.name} />,
           }}>
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Stocks"
             component={StocksScreen}
             options={{
               headerShown: true,
             }}
+          /> */}
+          <Stack.Screen
+            name="WordSearch"
+            component={WordSearch}
+            options={{
+              headerShown: true,
+            }}
           />
           {/* <Stack.Screen name="Crypto" component={CryptoListingScreen} /> */}
-          {/* <Stack.Screen
-            name="Quiz"
-            component={QuizScreen}
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
             options={{headerShown: true}}
-          /> */}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </QueryClientProvider>

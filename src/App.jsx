@@ -5,6 +5,7 @@ import QuizScreen from './screens/quiz/Quiz';
 import StocksScreen from './screens/stocks';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import Header from './components/header';
+import WordSeaWordSearchrchGame from './screens/wordSearch';
 
 const queryClient = new QueryClient();
 const App = () => {
@@ -14,13 +15,20 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Stocks"
+          initialRouteName="WordSearch"
           screenOptions={{
-            header: ({route}) => <Header name={route.name} />,
+            header: ({route, back}) => <Header name={route.name} back={back} />,
           }}>
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Stocks"
             component={StocksScreen}
+            options={{
+              headerShown: true,
+            }}
+          /> */}
+          <Stack.Screen
+            name="WordSearch"
+            component={WordSearch}
             options={{
               headerShown: true,
             }}

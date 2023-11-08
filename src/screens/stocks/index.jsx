@@ -1,11 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useQuery} from 'react-query';
 import tw from 'twrnc';
-import {
-  fetchCryptoByDate,
-  fetchCryptoPrices,
-  fetchStockPrices,
-} from '../../api/marketData';
+import {fetchStockData, fetchStockHistory} from '../../api/marketData';
 import {
   ActivityIndicator,
   Alert,
@@ -17,48 +13,12 @@ import {
 // import FullSizeChart from '../../components/chart/FullSizeChart';
 import Header from '../../components/header';
 import images from '../../images';
-import {cryptoList, currency, stockGraph} from '../../constants';
+import {stockGraph, stocksIds, stocksList} from '../../constants';
 
 import cryptoImages from '../../images/crypto';
 import FullSizeChart from '../../components/chart/FullSizeChart';
 
-// const chartData = [
-//   {value: 3},
-//   {value: 6},
-//   {value: 5},
-//   {value: 9},
-//   {value: 11},
-//   {value: 18},
-//   {value: 15.5},
-//   {value: 16},
-//   {value: 24},
-//   {value: 25},
-//   {value: 20},
-//   {value: 21},
-//   {value: 24},
-//   {value: 26},
-//   {value: 30},
-//   {value: 35},
-//   {value: 33},
-//   {value: 32},
-//   {value: 36},
-//   {value: 38},
-//   {value: 45},
-//   {value: 50},
-//   {value: 54},
-//   {value: 57},
-//   {value: 59},
-//   {value: 60},
-//   {value: 61},
-//   {value: 61.5},
-//   {value: 61.75},
-//   {value: 61.85},
-//   {value: 62},
-//   {value: 62.1},
-//   {value: 59},
-//   {value: 60},
-//   {value: 61},
-// ];
+// const chartData = [183, 182, 186.5, 184];
 
 const mock = {
   'Meta Data': {
@@ -80,14 +40,16 @@ const mock = {
 };
 
 const StocksScreen = () => {
-  const {data, isLoading} = useQuery('fetchMarketData', fetchStockPrices);
-  const {data: cryptoData} = useQuery('fetchCryptoPrices', fetchCryptoPrices);
-  const {data: cryptoDayBefore} = useQuery(
-    'fetchCryptoByDate',
-    fetchCryptoByDate,
+  const {data, isLoading, error} = useQuery('fetchStockHistory', () =>
+    fetchStockHistory(stockGraph),
   );
-
-  if (isLoading || !Object.keys(data)?.length) {
+  console.log(data);
+  // const {data, isLoading: isLoadingStocks} = useQuery(
+  //   'fetchStockData',
+  //   fetchStockData,
+  // );
+  if (!data) {
+    console.log(error);
     return (
       <View style={tw`mt-8`}>
         <ActivityIndicator />
@@ -97,10 +59,7 @@ const StocksScreen = () => {
 
   return (
     <View style={tw`relative mt-8 mx-8 py-5`}>
-      <FullSizeChart
-        data={data?.o?.map(value => ({value}))}
-        symbol={stockGraph}
-      />
+      <FullSizeChart data={data.o} symbol={stockGraph} />
       <Text style={tw`text-2xl text-black font-semibold mb-3`}>
         Information block
       </Text>
@@ -127,32 +86,36 @@ const StocksScreen = () => {
       <Text style={tw`text-2xl text-black font-semibold mb-3`}>
         Cryptocurrency Prices
       </Text>
-      {/* {Object.keys(cryptoData).map((key, index) => {
-        const price = cryptoData[key][currency];
-        const yesterdayPrice = cryptoDayBefore ? cryptoDayBefore[key] : 0;
-        const percentageDiff = (price / yesterdayPrice - 1) * 100;
-        const isGrowth = percentageDiff > 0;
-        const percentageSign = isGrowth ? '+' : '';
+      {/* {data &&
+        stocksIds.map((key, index) => {
+          const price = data[key];
+          const yesterdayPrice = stocksDayBefore ? cryptoDayBefore[key] : 0;
+          const percentageDiff = (price / yesterdayPrice - 1) * 100;
+          const isGrowth = percentageDiff > 0;
+          const percentageSign = isGrowth ? '+' : '';
 
-        return (
-          <View
-            style={tw`h-16 p-3 w-full flex flex-row gap-2 mb-3 rounded-md bg-[#6070ff41]`}
-            key={key}>
-            <Image source={cryptoImages[key]} style={tw`w-10 h-10 shrink-0`} />
-            <View style={tw`flex-1`}>
-              <View style={tw`flex flex-row justify-between w-max `}>
-                <Text style={tw`font-semibold text-sm`}>
-                  {cryptoList[key].title}
-                </Text>
-                <Text style={tw`font-semibold text-sm w-min `}>
-                  ${cryptoData[key][currency]}
-                </Text>
-              </View>
-              <View style={tw`flex flex-row justify-between gap-2`}>
-                <Text style={tw`text-slate-500 text-xs`}>
-                  {cryptoList[key].subTitle}
-                </Text>
-                {cryptoDayBefore[key] && (
+          return (
+            <View
+              style={tw`h-16 p-3 w-full flex flex-row gap-2 mb-3 rounded-md bg-[#6070ff41]`}
+              key={key}>
+              <Image
+                source={cryptoImages[key]}
+                style={tw`w-10 h-10 shrink-0`}
+              />
+              <View style={tw`flex-1`}>
+                <View style={tw`flex flex-row justify-between w-max `}>
+                  <Text style={tw`font-semibold text-sm`}>
+                    {stocksList[key].title}
+                  </Text>
+                  <Text style={tw`font-semibold text-sm w-min `}>
+                    ${data[key]}
+                  </Text>
+                </View>
+                <View style={tw`flex flex-row justify-between gap-2`}>
+                  <Text style={tw`text-slate-500 text-xs`}>
+                    {stocksList[key].subTitle}
+                  </Text>
+                  {cryptoDayBefore[key] && (
                   <Text
                     style={tw`${
                       isGrowth ? 'text-lime-500' : 'text-rose-300'
@@ -161,11 +124,11 @@ const StocksScreen = () => {
                     {percentageDiff.toFixed(2)}%
                   </Text>
                 )}
+                </View>
               </View>
             </View>
-          </View>
-        );
-      })} */}
+          );
+        })} */}
     </View>
   );
 };

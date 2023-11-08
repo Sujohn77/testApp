@@ -61,18 +61,9 @@ const HomeScreen = ({navigation}) => {
             style={tw`w-[50%] min-w-[200px] h-[240px]`}
           />
         </ImageBackground>
-        <Text>test</Text>
       </View>
     </SafeAreaView>
   );
 };
-
-var styles = StyleSheet.create({
-  image: {
-    width: 107,
-    height: 165,
-    padding: 10,
-  },
-});
 
 export default HomeScreen;

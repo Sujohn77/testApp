@@ -1,35 +1,43 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-import {LineChart} from 'react-native-gifted-charts';
+
+import {LineChart, Grid, AreaChart} from 'react-native-svg-charts';
+import {LinearGradient, Stop, Defs, Line} from 'react-native-svg';
 
 import tw from 'twrnc';
-
-const FullSizeChart = ({data, symbol}) => {
+import {stocksList} from '../../constants';
+export const Gradient = ({colors}) => (
+  <Defs>
+    <LinearGradient id={'gradient'} x1={'0%'} y1={'0%'} x2={'0%'} y2={'100%'}>
+      <Stop offset={'0%'} stopColor={colors[0]} stopOpacity={0.8} />
+      <Stop offset={'100%'} stopColor={colors[1]} stopOpacity={0.2} />
+    </LinearGradient>
+  </Defs>
+);
+const currency = '$';
+const FullSizeChart = ({data = [], symbol}) => {
+  const gradientColors = ['#B706D6', '#289BF6'];
   return (
-    <View style={tw`bg-[#2899f63d] rounded-xl mb-5 relative h-[180px]`}>
-      <View style={tw`absolute left-5 top-5`}>
-        <Text style={tw`text-xl text-black font-bold`}>{symbol}</Text>
-        <Text style={tw`text-slate-400`}>Apple Inc.</Text>
-        {/* <Text style={tw`text-xl font-bold`}>{symbol}</Text> */}
+    <View
+      style={tw`bg-[#2899f63d] rounded-xl mb-5 relative h-[180px] overflow-hidden`}>
+      <View style={tw`absolute left-3 top-3`}>
+        <Text style={tw`text-lg text-black font-bold`}>{symbol}</Text>
+        <Text style={tw`text-slate-400 text-[9px] mb-[2px]`}>
+          {stocksList[symbol].subTitle}
+        </Text>
+        <Text style={tw`text-lg font-bold mt-[2px]`}>
+          {!!data.length && currency}
+          {data[0]}
+        </Text>
       </View>
 
-      <LineChart
+      <AreaChart
+        style={{height: 180}}
         data={data}
-        hideDataPoints1
-        hideAxesAndRules
-        areaChart1
-        noOfSections={2.5}
-        startFillColor1="#b918d5"
-        endFillColor1="#289BF6"
-        color="#4ffb0010"
-        endOpacity1={0.3}
-        stripOpacity={0.5}
-        adjustToWidth
-        initialSpacing={0}
-        height={150}
-        curved
-        endSpacing={0}
-      />
+        contentInset={{top: 85, bottom: 30}}
+        svg={{fill: 'rgba(134, 65, 244, 0.5)'}}>
+        <Gradient colors={gradientColors} />
+      </AreaChart>
     </View>
   );
 };
