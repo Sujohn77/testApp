@@ -6,8 +6,9 @@ import {
   Text,
   View,
 } from 'react-native';
+import images from '../../assets/images';
 
-import images from '../../../public/images';
+
 
 
 const InitialScreen = () => {

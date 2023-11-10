@@ -24,7 +24,7 @@ const DefaultModal = ({onClose, visible}) => {
         <View style={tw`bg-[#00000080] flex-1 items-center justify-center`}>
           <TouchableWithoutFeedback>
             <View
-              style={tw`h-[300px] pt-4 px-6 w-min-[300px] w-[80%] bg-white shadow-xl rounded-xl`}>
+              style={tw`h-[300px] pt-4 px-6 w-[80%] bg-white shadow-xl rounded-xl`}>
               <Text style={tw`text-2xl text-center mb-3 font-bold`}>
                 ANSWERS
               </Text>

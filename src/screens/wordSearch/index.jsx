@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, createRef} from 'react';
+import React, {useState, useEffect, useRef, createRef} from "react";
 import {
   View,
   Text,
@@ -8,22 +8,24 @@ import {
   ImageBackground,
   SafeAreaView,
   PanResponder,
-} from 'react-native';
+  Alert,
+} from "react-native";
 
-import tw from 'twrnc';
-import images from '../../assets/images';
-import {crosswords, searchWords} from '../../constants';
-import {getWordStyle, isFoundWord} from '../../utils';
-import DefaultModal from '../../components/modal';
-import CrosswordQuestions from '../../components/crosswordQuestions';
-import Menu from '../../components/menu';
+import tw from "twrnc";
+import images from "../../assets/images";
+import {crosswords, searchWords} from "../../constants";
+import {getWordStyle, findMatches} from "../../utils";
+import DefaultModal from "../../components/modal";
+import CrosswordQuestions from "../../components/crosswordQuestions";
+import Menu from "../../components/menu";
+import Shadow from "../../components/shadow";
 
 const cellSize = 30;
 const boardSize = crosswords.length;
-const buttons = ['Answer', 'Reset'];
+const buttons = ["Answer", "Reset"];
 
-const WordSearch = ({navigation}) => {
-  const [selectedWord, setSelectedWord] = useState('');
+const WordSearch = ({navigation, route}) => {
+  const [selectedWord, setSelectedWord] = useState("");
   const [foundWords, setFoundWords] = useState([]);
   const [wordsCoords, setWordsCoords] = useState([]);
   const [letterIndexes, setLetterIndexes] = useState([]);
@@ -32,20 +34,28 @@ const WordSearch = ({navigation}) => {
   const viewRef = createRef(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [containerPosition, setContainerPosition] = useState({x: 0, y: 0});
-
-  useEffect(() => {
-    // selectedWord.length && console.log(selectedWord);
-  }, [letterIndexes, wordsCoords]);
+  const navigate = route => {
+    navigation.navigate(route);
+  };
 
   const handleCellPress = (letter, rowIndex, colIndex) => {
     const word = selectedWord + letter;
 
     // PREVENT DUPLICATE LETTER
     if (letterIndexes.length) {
+      const first = letterIndexes[0];
+
       const last = letterIndexes[letterIndexes.length - 1];
-      const isDuplicateIndex =
+      const isDuplicateLetter =
+        first.colIndex == colIndex && first.rowIndex == rowIndex;
+      const isDuplicateReverseLetter =
         last.colIndex == colIndex && last.rowIndex == rowIndex;
-      if (isDuplicateIndex) return;
+
+      if (
+        (isReversedLine && isDuplicateLetter) ||
+        (!isReversedLine && isDuplicateReverseLetter)
+      )
+        return;
     }
 
     if (letterIndexes.length < 2) {
@@ -66,7 +76,7 @@ const WordSearch = ({navigation}) => {
 
     const isColumnReverse = first.colIndex > colIndex;
     const isRowReverse = first.rowIndex > rowIndex;
-    const isReverseLine = isRowReverse || isColumnReverse;
+    const isReversed = isRowReverse || isColumnReverse;
     const lineCoords = [
       {
         rowIndex: first.rowIndex,
@@ -78,24 +88,27 @@ const WordSearch = ({navigation}) => {
       },
     ];
 
-    if (isReverseLine) {
+    if (isReversed) {
       const coords = lineCoords.reverse();
-      console.log(coords);
+
       setLetterIndexes(coords);
     } else {
       setLetterIndexes([letterIndexes[0], {rowIndex, colIndex}]);
     }
 
-    if (isFoundWord(searchWords, word)) {
-      setFoundWords([...foundWords, word]);
-      console.log(letterIndexes);
-      setWordsCoords([
-        ...wordsCoords,
-        [letterIndexes[0], {colIndex, rowIndex}],
-      ]);
-      setSelectedWord('');
+    const matchedWord = findMatches(searchWords, word);
+
+    if (matchedWord) {
+      setFoundWords([...foundWords, matchedWord]);
+      const wordCoords = [first, {colIndex, rowIndex}];
+      const dimensionCoords = isReversed ? wordCoords.reverse() : wordCoords;
+
+      setWordsCoords([...wordsCoords, dimensionCoords]);
+      setSelectedWord("");
+      return;
     }
-    setIsReversedLine(isReverseLine);
+
+    !isReversedLine && setIsReversedLine(isReversed);
     setSelectedWord(word);
   };
 
@@ -103,7 +116,7 @@ const WordSearch = ({navigation}) => {
     setLetterIndexes([]);
     setIsTouched(false);
     setIsReversedLine(false);
-    setSelectedWord('');
+    setSelectedWord("");
     return;
   };
 
@@ -122,7 +135,7 @@ const WordSearch = ({navigation}) => {
       const colIndex = Math.floor(relativeX / cellSize);
       const rowIndex = Math.floor(relativeY / cellSize);
       const roundedCol =
-        colIndex < crosswords[0].length ? colIndex : boardSize - 1;
+        colIndex < crosswords[0].length ? colIndex : crosswords[0].length - 1;
       const roundedRow =
         rowIndex < crosswords.length ? rowIndex : boardSize - 1;
 
@@ -141,9 +154,11 @@ const WordSearch = ({navigation}) => {
   });
 
   const onLayout = () => {
-    viewRef.current?.measure((x, y, width, height, pageX, pageY) => {
-      setContainerPosition({x: pageX, y: pageY});
-    });
+    setTimeout(() => {
+      viewRef.current?.measure((x, y, width, height, pageX, pageY) => {
+        setContainerPosition({x: pageX, y: pageY});
+      });
+    }, 500);
   };
 
   const handleButtonTouch = index => {
@@ -168,86 +183,90 @@ const WordSearch = ({navigation}) => {
   ));
 
   return (
-    <View>
-      <DefaultModal
-        onClose={() => setIsModalVisible(false)}
-        visible={isModalVisible}
-      />
-      <View>
-        <ImageBackground
-          style={tw`flex items-center h-full pt-5 bg-cover bg-top`}
-          source={images.wordSearchBg}>
-          <View style={styles.container}>
-            <View style={tw`flex flex-row justify-between gap-3 mb-5`}>
-              {questionButtons}
+    <SafeAreaView>
+      <View style={tw`h-full`}>
+        <DefaultModal
+          onClose={() => setIsModalVisible(false)}
+          visible={isModalVisible}
+        />
+        <View>
+          <ImageBackground
+            style={tw`h-full pt-5 bg-cover bg-top`}
+            source={images.wordSearchBg}>
+            <View style={tw``}>
+              <View style={tw`flex flex-row justify-center gap-8 mb-5`}>
+                {questionButtons}
+              </View>
+
+              <Shadow>
+                <View
+                  ref={viewRef}
+                  onLayout={onLayout}
+                  style={tw`h-[270px] w-[360px] mx-auto bg-white rounded-lg overflow-hidden`}>
+                  <FlatList
+                    data={crosswords}
+                    style={tw``}
+                    keyExtractor={(item, index) => index.toString()}
+                    {...panResponder.panHandlers}
+                    scrollEnabled={false}
+                    onTouchEnd={resetCoords}
+                    renderItem={({item, index: rowIndex}) => (
+                      <View style={styles.row}>
+                        {item.map((letter, colIndex) => {
+                          const word = wordsCoords?.find(
+                            item =>
+                              item.length &&
+                              item[0].colIndex == colIndex &&
+                              item[0].rowIndex == rowIndex,
+                          );
+                          const wordStyle =
+                            word && getWordStyle(word, cellSize);
+
+                          const isSelected =
+                            (letterIndexes.length &&
+                              letterIndexes[0].colIndex === colIndex &&
+                              letterIndexes[0].rowIndex === rowIndex) ||
+                            !!word;
+
+                          return (
+                            <TouchableOpacity
+                              key={rowIndex + colIndex}
+                              onPressIn={() =>
+                                handleCellPress(letter, rowIndex, colIndex)
+                              }
+                              style={tw` h-[30px] w-[30px] flex items-center justify-center`}>
+                              {isSelected && (
+                                <View
+                                  style={tw`absolute left-[1px] top-[1px] ${
+                                    wordStyle || selectedStyle
+                                  } bg-pink-600 rounded-xl`}
+                                />
+                              )}
+                              <Text style={tw`text-black text-lg uppercase`}>
+                                {letter}
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        })}
+                      </View>
+                    )}
+                  />
+                </View>
+              </Shadow>
             </View>
 
-            <View
-              ref={viewRef}
-              onLayout={onLayout}
-              style={tw`shadow-2xl shadow-black py-2 h-[284px] bg-white rounded-lg border-none overflow-hidden`}>
-              <FlatList
-                data={crosswords}
-                style={tw`border-none `}
-                keyExtractor={(item, index) => index.toString()}
-                {...panResponder.panHandlers}
-                scrollEnabled={false}
-                onTouchEnd={resetCoords}
-                renderItem={({item, index: rowIndex}) => (
-                  <View style={styles.row}>
-                    {item.map((letter, colIndex) => {
-                      const word = wordsCoords?.find(
-                        item =>
-                          item.length &&
-                          item[0].colIndex == colIndex &&
-                          item[0].rowIndex == rowIndex,
-                      );
-                      const wordStyle = word && getWordStyle(word, cellSize);
-
-                      const isSelected =
-                        (letterIndexes.length &&
-                          letterIndexes[0].colIndex === colIndex &&
-                          letterIndexes[0].rowIndex === rowIndex) ||
-                        !!word;
-
-                      return (
-                        <TouchableOpacity
-                          key={colIndex}
-                          onPressIn={() =>
-                            handleCellPress(letter, rowIndex, colIndex)
-                          }
-                          style={tw`h-[30px] w-[30px] flex items-center justify-center`}>
-                          {isSelected && (
-                            <View
-                              style={tw`absolute left-[1px] top-[1px] ${
-                                wordStyle || selectedStyle
-                              } bg-pink-500 rounded-lg`}
-                            />
-                          )}
-                          <Text style={tw`text-black text-lg uppercase`}>
-                            {letter}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
-                )}
-              />
-            </View>
-          </View>
-
-          <CrosswordQuestions />
-          <Menu activeIndex={2} navigation={navigation} />
-        </ImageBackground>
+            <CrosswordQuestions />
+          </ImageBackground>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: 20,
@@ -261,15 +280,15 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   cell: {
     width: 40,
     height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: "gray",
   },
   letter: {
     fontSize: 16,
