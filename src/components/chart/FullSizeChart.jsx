@@ -70,8 +70,7 @@ const FullSizeChart = ({
       </View>
 
       {small ? (
-        <View
-          style={tw`overflow-x-hidden flex-1 absolute left-[180px] top-[60px]`}>
+        <View style={tw`flex-1 absolute left-[180px] top-[60px]`}>
           {renderChart()}
         </View>
       ) : (

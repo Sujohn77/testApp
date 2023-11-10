@@ -13,7 +13,7 @@ const navLinks = {
   [iconNames[3]]: "Crypto",
 };
 
-export const excludeRoute = "StocksPost";
+export const excludeRoutes = ["StocksPost", "TradingTipsPost", "Welcome"];
 
 const Menu = ({state, navigation}) => {
   const navigate = name => {
@@ -21,7 +21,7 @@ const Menu = ({state, navigation}) => {
   };
 
   const menuItems = state?.routes
-    ?.filter(item => item.name !== excludeRoute)
+    ?.filter(item => !excludeRoutes.includes(item.name))
     .map((item, index) => {
       const isActive = state.index == index;
       return (
@@ -44,9 +44,11 @@ const Menu = ({state, navigation}) => {
         </View>
       );
     });
+  const isActive = navigation.isFocused();
+  const isExcludeRoute = excludeRoutes.includes(state.routeName);
+  console.log(isActive, isExcludeRoute);
 
-  if (navigation.isFocused() && state.routeName == excludeRoute)
-    return <View />;
+  if (isActive && isExcludeRoute) return <View />;
 
   return (
     <View

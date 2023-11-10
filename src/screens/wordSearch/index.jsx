@@ -19,6 +19,7 @@ import DefaultModal from "../../components/modal";
 import CrosswordQuestions from "../../components/crosswordQuestions";
 import Menu from "../../components/menu";
 import Shadow from "../../components/shadow";
+import CrosswordInitial from "../../components/crossword/CrosswordInitial";
 
 const cellSize = 30;
 const boardSize = crosswords.length;
@@ -34,9 +35,7 @@ const WordSearch = ({navigation, route}) => {
   const viewRef = createRef(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [containerPosition, setContainerPosition] = useState({x: 0, y: 0});
-  const navigate = route => {
-    navigation.navigate(route);
-  };
+  const [isStartCrossword, setIsStartCrossword] = useState(false);
 
   const handleCellPress = (letter, rowIndex, colIndex) => {
     const word = selectedWord + letter;
@@ -184,81 +183,85 @@ const WordSearch = ({navigation, route}) => {
 
   return (
     <SafeAreaView>
-      <View style={tw`h-full`}>
-        <DefaultModal
-          onClose={() => setIsModalVisible(false)}
-          visible={isModalVisible}
-        />
-        <View>
-          <ImageBackground
-            style={tw`h-full pt-5 bg-cover bg-top`}
-            source={images.wordSearchBg}>
-            <View style={tw``}>
-              <View style={tw`flex flex-row justify-center gap-8 mb-5`}>
-                {questionButtons}
-              </View>
-
-              <Shadow>
-                <View
-                  ref={viewRef}
-                  onLayout={onLayout}
-                  style={tw`h-[270px] w-[360px] mx-auto bg-white rounded-lg overflow-hidden`}>
-                  <FlatList
-                    data={crosswords}
-                    style={tw``}
-                    keyExtractor={(item, index) => index.toString()}
-                    {...panResponder.panHandlers}
-                    scrollEnabled={false}
-                    onTouchEnd={resetCoords}
-                    renderItem={({item, index: rowIndex}) => (
-                      <View style={styles.row}>
-                        {item.map((letter, colIndex) => {
-                          const word = wordsCoords?.find(
-                            item =>
-                              item.length &&
-                              item[0].colIndex == colIndex &&
-                              item[0].rowIndex == rowIndex,
-                          );
-                          const wordStyle =
-                            word && getWordStyle(word, cellSize);
-
-                          const isSelected =
-                            (letterIndexes.length &&
-                              letterIndexes[0].colIndex === colIndex &&
-                              letterIndexes[0].rowIndex === rowIndex) ||
-                            !!word;
-
-                          return (
-                            <TouchableOpacity
-                              key={rowIndex + colIndex}
-                              onPressIn={() =>
-                                handleCellPress(letter, rowIndex, colIndex)
-                              }
-                              style={tw` h-[30px] w-[30px] flex items-center justify-center`}>
-                              {isSelected && (
-                                <View
-                                  style={tw`absolute left-[1px] top-[1px] ${
-                                    wordStyle || selectedStyle
-                                  } bg-pink-600 rounded-xl`}
-                                />
-                              )}
-                              <Text style={tw`text-black text-lg uppercase`}>
-                                {letter}
-                              </Text>
-                            </TouchableOpacity>
-                          );
-                        })}
-                      </View>
-                    )}
-                  />
+      {!isStartCrossword && (
+        <CrosswordInitial onPress={() => setIsStartCrossword(true)} />
+      )}
+      {isStartCrossword && (
+        <View style={tw`h-full`}>
+          <DefaultModal
+            onClose={() => setIsModalVisible(false)}
+            visible={isModalVisible}
+          />
+          <View>
+            <ImageBackground
+              style={tw`h-full pt-5 bg-cover bg-top`}
+              source={images.wordSearchBg}>
+              <View style={tw``}>
+                <View style={tw`flex flex-row justify-center gap-8 mb-5`}>
+                  {questionButtons}
                 </View>
-              </Shadow>
-            </View>
 
-            <CrosswordQuestions />
-          </ImageBackground>
+                <Shadow>
+                  <View
+                    ref={viewRef}
+                    onLayout={onLayout}
+                    style={tw`h-[270px] w-[360px] mx-auto bg-white rounded-lg overflow-hidden`}>
+                    <FlatList
+                      data={crosswords}
+                      style={tw``}
+                      keyExtractor={(item, index) => index.toString()}
+                      {...panResponder.panHandlers}
+                      scrollEnabled={false}
+                      onTouchEnd={resetCoords}
+                      renderItem={({item, index: rowIndex}) => (
+                        <View style={styles.row}>
+                          {item.map((letter, colIndex) => {
+                            const word = wordsCoords?.find(
+                              item =>
+                                item.length &&
+                                item[0].colIndex == colIndex &&
+                                item[0].rowIndex == rowIndex,
+                            );
+                            const wordStyle =
+                              word && getWordStyle(word, cellSize);
+
+                            const isSelected =
+                              (letterIndexes.length &&
+                                letterIndexes[0].colIndex === colIndex &&
+                                letterIndexes[0].rowIndex === rowIndex) ||
+                              !!word;
+
+                            return (
+                              <TouchableOpacity
+                                key={rowIndex + colIndex}
+                                onPressIn={() =>
+                                  handleCellPress(letter, rowIndex, colIndex)
+                                }
+                                style={tw` h-[30px] w-[30px] flex items-center justify-center`}>
+                                {isSelected && (
+                                  <View
+                                    style={tw`absolute left-[1px] top-[1px] ${
+                                      wordStyle || selectedStyle
+                                    } bg-pink-600 rounded-xl`}
+                                  />
+                                )}
+                                <Text style={tw`text-black text-lg uppercase`}>
+                                  {letter}
+                                </Text>
+                              </TouchableOpacity>
+                            );
+                          })}
+                        </View>
+                      )}
+                    />
+                  </View>
+                </Shadow>
+              </View>
+              <CrosswordQuestions />
+            </ImageBackground>
+          </View>
         </View>
-      </View>
+      )}
     </SafeAreaView>
   );
 };

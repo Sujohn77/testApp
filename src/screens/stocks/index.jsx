@@ -107,7 +107,7 @@ const StocksScreen = ({navigation}) => {
                   borderRadius: 15,
                   overflow: "hidden",
                 }}>
-                <Text style={tw`font-semibold text-white text-xl w-[50%] `}>
+                <Text style={tw`font-semibold text-white text-xl w-[50%]`}>
                   How can artificial intelligence be used to become a trader?
                 </Text>
               </ImageBackground>
@@ -130,24 +130,26 @@ const StocksScreen = ({navigation}) => {
                   <View
                     style={tw`h-16 p-3 w-full flex flex-row gap-2 mb-3 rounded-md bg-[#6070ff41]`}
                     key={key}>
-                    <Image
-                      source={stocksImages[key] ? stocksImages[key] : ""}
-                      style={tw`w-10 h-10 shrink-0 rounded-full`}
-                    />
+                    {!!stocksImages[key] && (
+                      <Image
+                        source={stocksImages[key]}
+                        style={tw`w-10 h-10 shrink-0 rounded-full`}
+                      />
+                    )}
                     <View style={tw`flex-1`}>
                       <View style={tw`flex flex-row justify-between w-max `}>
                         <Text style={tw`font-semibold text-sm`}>
                           {stocksList[key]?.title}
                         </Text>
                         <Text style={tw`font-semibold text-sm w-min `}>
-                          {stocksPrices[index] && `$${stocksPrices[index]}`}
+                          {!!stocksPrices[index] && `$${stocksPrices[index]}`}
                         </Text>
                       </View>
                       <View style={tw`flex flex-row justify-between gap-2`}>
                         <Text style={tw`text-slate-500 text-xs`}>
                           {stocksList[key]?.subTitle}
                         </Text>
-                        {yesterdayPrice && (
+                        {!!yesterdayPrice && (
                           <Text
                             style={tw`${
                               isGrowth ? "text-lime-500" : "text-rose-300"

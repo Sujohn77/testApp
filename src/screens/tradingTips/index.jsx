@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, useMemo} from "react";
 import {useQueries, useQuery} from "react-query";
 import tw from "twrnc";
 import {fetchStockData} from "../../api/marketData";
@@ -41,6 +41,37 @@ const tradingTipsImages = [
 ];
 
 const TradingTipsScreen = ({navigation}) => {
+  const navigate = ({subtitle, description}) => {
+    navigation.navigate("TradingTipsPost", {
+      imageName: "tradingTips1",
+      title: subtitle,
+      text: description,
+    });
+  };
+
+  const renderPostRow = ({item, index, image}) => {
+    return (
+      <View
+        key={index}
+        onTouchEnd={() => navigate(item)}
+        style={tw`flex flex-row mb-3 items-center gap-6 w-full bg-sky-200 border-l-[#BD00DD] border-l-2 rounded-lg px-3 py-3`}>
+        <Text style={tw`text-lg text-black w-[70%]`}>{item.title}</Text>
+        <Image style={tw`w-[60px] h-[60px]`} source={image} />
+      </View>
+    );
+  };
+
+  const newestTips = data
+    .filter(item => moment().isSame(item.date, "day"))
+    .map((item, index) =>
+      renderPostRow({item, index, image: tradingTipsImages[1]}),
+    );
+
+  const otherTips = data
+    .filter(item => !moment().isSame(item.date, "day"))
+    .map((item, index) =>
+      renderPostRow({item, index, image: tradingTipsImages[1]}),
+    );
   return (
     <SafeAreaView>
       <ScrollView>
@@ -58,23 +89,14 @@ const TradingTipsScreen = ({navigation}) => {
               Tips that will make you a successful trader
             </Text>
           </ImageBackground>
-          <View style={tw`px-3`}>
+          <View style={tw`px-3 flex flex-col gap-3`}>
             <View>
               <Text style={tw`text-lg text-black`}>Newest</Text>
-              <View style={tw`mt-3`}>
-                {data.map((item, index) => (
-                  <View
-                    style={tw`flex flex-row mb-3 items-center gap-2 w-full bg-sky-200 border-l-[#BD00DD] border-l-2 rounded-lg px-3 py-3`}>
-                    <Text style={tw`text-lg text-black w-[70%]`}>
-                      {item.title}
-                    </Text>
-                    <Image
-                      style={tw`w-[60px] h-[60px]`}
-                      source={tradingTipsImages[index]}
-                    />
-                  </View>
-                ))}
-              </View>
+              <View style={tw`mt-3`}>{newestTips}</View>
+            </View>
+            <View>
+              <Text style={tw`text-lg text-black`}>Oldest</Text>
+              <View style={tw`mt-3`}>{otherTips}</View>
             </View>
           </View>
         </View>

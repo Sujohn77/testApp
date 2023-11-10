@@ -10,6 +10,11 @@ const images = {
   tradingTips1: require("./tradingTips1.png"),
   tradingTips2: require("./tradingTips2.png"),
   tradingTips3: require("./tradingTips3.png"),
+  ai: require("./ai-background.png"),
+  radiantButton: require("./radiant-button.png"),
+  welcomeFirst: require("./initial-screen1.png"),
+  welcomeSecond: require("./initial-screen2.png"),
+  welcomeThird: require("./initial-screen3.png"),
 };
 
 module.exports = images;

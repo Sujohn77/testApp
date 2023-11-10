@@ -11,6 +11,8 @@ import {StyleSheet} from "react-native";
 import Menu from "./src/components/menu";
 import StocksPost from "./src/screens/stocksPost";
 import TradingTipsScreen from "./src/screens/tradingTips";
+import TradingTipsPost from "./src/screens/tradingTipsPost";
+import WelcomeScreen from "./src/screens/welcome";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +24,8 @@ const routes = [
   {name: "Stocks", component: StocksScreen},
   {name: "WordSearch", component: WordSearch},
   {name: "TradingTips", component: TradingTipsScreen},
+  {name: "TradingTipsPost", component: TradingTipsPost},
+  {name: "Welcome", component: WelcomeScreen},
   {
     name: "StocksPost",
     component: StocksPost,
@@ -34,7 +38,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
         <Tab.Navigator
-          initialRouteName="Crypto"
+          initialRouteName="Welcome"
           tabBar={Menu}
           screenOptions={{
             headerShown: false,

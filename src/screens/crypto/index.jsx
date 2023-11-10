@@ -67,7 +67,7 @@ const CryptoScreen = ({navigation}) => {
         [item.id]: item.market_data?.current_price[currency],
       };
     });
-  navigation.nav;
+
   return (
     <SafeAreaView>
       <ScrollView contentContainerStyle={tw`pb-5`}>
@@ -95,7 +95,7 @@ const CryptoScreen = ({navigation}) => {
               const key = Object.keys(item)[0];
 
               const price =
-                item[key] > 1 ? item[key].toFixed(2) : item[key].toFixed(4);
+                item[key] > 1 ? item[key]?.toFixed(2) : item[key]?.toFixed(4);
               const yesterdayPrice = cryptoDayBefore ? cryptoDayBefore[key] : 0;
 
               const percentageDiff = (price / yesterdayPrice - 1) * 100;
