@@ -54,10 +54,10 @@ export const fetchCryptoHistory = async ({
   } catch (err) {}
 };
 
-export const fetchCryptoPrices = async () => {
-  const cryptoIds = Object.keys(cryptoList).join(",");
+export const fetchCryptoPrices = async ({ids}) => {
+  const cryptoIds = ids.join(",");
   const response = await fetch(
-    `https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd`,
+    `https://api.coincap.io/v2/assets?ids=${cryptoIds}`,
   );
 
   return response.json();
@@ -72,7 +72,7 @@ export const fetchQuizWelcome = async () => {
 const today = moment().format("DD-MM-YYYY");
 export const fetchCryptoByDate = async ({name, date = today}) => {
   try {
-    const url = `https://api.coingecko.com/api/v3/coins/${name}/history?date=${date}`;
+    const url = `https://api.coingecko.com/api/v3/coins/${name}/history?date=${date}?x_cg_pro_api_key=ecaf5b3d-b1c8-4141-8778-289f93f28787`;
     const response = await axios.get(url);
 
     return response.data;

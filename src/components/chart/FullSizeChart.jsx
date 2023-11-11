@@ -44,6 +44,8 @@ const FullSizeChart = ({
       <Gradient colors={gradientColors} />
     </AreaChart>
   );
+  const isGrowth = graphDiffValue > 0;
+  const growthSign = isGrowth ? "+" : "-";
   return (
     <View
       style={tw`${
@@ -63,16 +65,7 @@ const FullSizeChart = ({
             </Text>
           </View>
         </View>
-        {graphDiffValue ? (
-          <View
-            style={tw`${
-              graphDiffValue > 0 ? "bg-lime-500" : "bg-rose-500"
-            } py-1 px-2 rounded-lg absolute top-3 right-5`}>
-            <Text style={tw`text-lg text-white font-semibold text-center`}>
-              {graphDiffValue}
-            </Text>
-          </View>
-        ) : null}
+
         <Text
           style={tw`text-lg font-semibold  ${
             small ? "mt-10 text-2xl" : "mt-[2px]"
@@ -81,7 +74,20 @@ const FullSizeChart = ({
           {!!data?.length && data[0].toLocaleString()}
         </Text>
       </View>
-
+      {graphDiffValue ? (
+        <View
+          style={tw`${
+            isGrowth ? "bg-[#DCFFCC]" : "bg-rose-500"
+          }  px-2 py-1 rounded-lg absolute top-2 right-4`}>
+          <Text
+            style={tw`text-md ${
+              isGrowth ? "text-[#049C6B]" : "text-rose-200"
+            }  font-semibold text-center`}>
+            {growthSign}
+            {graphDiffValue}%
+          </Text>
+        </View>
+      ) : null}
       {small ? (
         <View style={tw`flex-1 absolute left-[180px] top-[60px]`}>
           {renderChart()}

@@ -17,6 +17,8 @@ import {useEffect, useState} from "react";
 import SplashScreen from "react-native-splash-screen";
 import {storageVisitedWelcome} from "./src/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {isQuizFirstVisit} from "./src/utils";
+import WelcomeQuiz from "./src/components/welcomeQuiz";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +32,7 @@ const routes = [
   {name: "TradingTips", component: TradingTipsScreen},
   {name: "TradingTipsPost", component: TradingTipsPost},
   {name: "Welcome", component: WelcomeScreen},
+  {name: "WelcomeQuiz", component: WelcomeQuiz},
   {
     name: "StocksPost",
     component: StocksPost,
@@ -49,18 +52,24 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    SplashScreen.hide();
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 300);
   }, []);
 
   if (isVisitedWelcome == null) {
     return null;
   }
 
+  const isQuiz = isQuizFirstVisit();
+
   return (
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
         <Tab.Navigator
-          initialRouteName={isVisitedWelcome ? "Stocks" : "Welcome"}
+          initialRouteName={
+            isQuiz ? "WelcomeQuiz" : isVisitedWelcome ? "Stocks" : "Welcome"
+          }
           tabBar={Menu}
           screenOptions={{
             headerShown: false,

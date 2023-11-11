@@ -46,7 +46,6 @@ const Menu = ({state, navigation}) => {
     });
   const isActive = navigation.isFocused();
   const isExcludeRoute = excludeRoutes.includes(state.routeNames[state.index]);
-  console.log(isActive, isExcludeRoute);
 
   if (isActive && isExcludeRoute) return <View />;
 

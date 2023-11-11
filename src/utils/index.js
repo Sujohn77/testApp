@@ -1,4 +1,5 @@
 import moment from "moment";
+import {currency} from "../constants";
 
 export const getWordStyle = (coords, cellSize, isReverseLine = false) => {
   const length = coords.length;
@@ -23,9 +24,19 @@ export const isQuizFirstVisit = (date = moment("2023-12-11")) => {
 };
 
 export const selectCryptoPrices = data => {
-  return data
-    .filter(Boolean)
-    .map(crypto => crypto.market_data.current_price[currency]);
+  let prices = {};
+  for (let item of data) {
+    if (item) {
+      prices = {
+        ...prices,
+        [item.id]: {
+          image: item.image.small,
+          price: item.market_data.current_price[currency],
+        },
+      };
+    }
+  }
+  return prices;
 };
 
 export const findMatches = (searchWords, word) => {

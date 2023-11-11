@@ -32,6 +32,7 @@ import {useRoute} from "@react-navigation/native";
 import moment from "moment";
 import stocksImages from "../../assets/images/stocks";
 import Shadow from "../../components/shadow";
+import WelcomeQuiz from "../../components/welcomeQuiz";
 
 const StocksScreen = ({navigation}) => {
   const {data: graphData} = useQuery("fetchStockHistory", () =>
@@ -116,7 +117,7 @@ const StocksScreen = ({navigation}) => {
             <Text style={tw`text-2xl text-black font-semibold my-2 mt-4`}>
               Stocks Prices
             </Text>
-            {!!stocksData &&
+            {!!stocksData ? (
               stocksIds.map((key, index) => {
                 const price = stocksPrices[index];
                 const yesterdayPrice = stocksPricesDayBefore
@@ -162,7 +163,10 @@ const StocksScreen = ({navigation}) => {
                     </View>
                   </View>
                 );
-              })}
+              })
+            ) : (
+              <ActivityIndicator />
+            )}
           </View>
         </View>
       </ScrollView>
