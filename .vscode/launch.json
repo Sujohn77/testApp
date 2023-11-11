@@ -10,7 +10,8 @@
       "type": "reactnative",
       "request": "launch",
       "platform": "ios",
-      "runArguments": ["--simulator", "iPhone 15"]
+      "runArguments": ["--simulator", "iPhone 15"],
+      "sourceMaps": true
     }
   ]
 }

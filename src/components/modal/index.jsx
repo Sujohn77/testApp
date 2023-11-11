@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Alert,
   Modal,
@@ -6,13 +6,13 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
-} from 'react-native';
-import tw from 'twrnc';
-import {searchWords} from '../../constants';
-import {capitalize} from '../../utils';
+} from "react-native";
+import tw from "twrnc";
+import {searchWords} from "../../constants";
+import {capitalize} from "../../utils";
 const DefaultModal = ({onClose, visible}) => {
   const words = searchWords.map((word, key) => (
-    <View key={key}>
+    <View key={`search-word-${key}`}>
       <Text
         style={tw`text-xl pb-2 font-semibold`}>{`\u2022 ${word.toLocaleUpperCase()}`}</Text>
     </View>

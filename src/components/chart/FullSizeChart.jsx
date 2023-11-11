@@ -33,6 +33,7 @@ const FullSizeChart = ({
   small = false,
   subTitle,
   title,
+  graphDiffValue,
 }) => {
   const gradientColors = small
     ? ["#F99F01", "#908FEC"]
@@ -52,7 +53,9 @@ const FullSizeChart = ({
       } overflow-hidden`}>
       <View style={tw`absolute left-3 top-3`}>
         <View style={tw`flex flex-row gap-2 items-center`}>
-          {image && <Image source={image} style={tw`w-[40px] h-[40px]`} />}
+          {image ? (
+            <Image source={image} style={tw`w-[40px] h-[40px]`} />
+          ) : null}
           <View>
             <Text style={tw`text-lg text-black font-bold`}>{title}</Text>
             <Text style={tw`text-slate-400 text-[9px] mb-[2px]`}>
@@ -60,6 +63,16 @@ const FullSizeChart = ({
             </Text>
           </View>
         </View>
+        {graphDiffValue ? (
+          <View
+            style={tw`${
+              graphDiffValue > 0 ? "bg-lime-500" : "bg-rose-500"
+            } py-1 px-2 rounded-lg absolute top-3 right-5`}>
+            <Text style={tw`text-lg text-white font-semibold text-center`}>
+              {graphDiffValue}
+            </Text>
+          </View>
+        ) : null}
         <Text
           style={tw`text-lg font-semibold  ${
             small ? "mt-10 text-2xl" : "mt-[2px]"

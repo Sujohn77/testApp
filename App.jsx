@@ -6,13 +6,17 @@ import {QueryClient, QueryClientProvider} from "react-query";
 import WordSearch from "./src/screens/wordSearch";
 import CryptoScreen from "./src/screens/crypto";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {StyleSheet} from "react-native";
+import {Alert, StyleSheet} from "react-native";
 
 import Menu from "./src/components/menu";
 import StocksPost from "./src/screens/stocksPost";
 import TradingTipsScreen from "./src/screens/tradingTips";
 import TradingTipsPost from "./src/screens/tradingTipsPost";
 import WelcomeScreen from "./src/screens/welcome";
+import {useEffect, useState} from "react";
+import SplashScreen from "react-native-splash-screen";
+import {storageVisitedWelcome} from "./src/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const queryClient = new QueryClient();
 
@@ -34,17 +38,35 @@ const routes = [
 
 const Tab = createBottomTabNavigator();
 const App = () => {
+  const [isVisitedWelcome, setIsVisitedWelcome] = useState(null);
+  useEffect(() => {
+    const getIsVisited = async () => {
+      const isVisited = await AsyncStorage.getItem(storageVisitedWelcome);
+      setIsVisitedWelcome(!!isVisited);
+    };
+
+    getIsVisited();
+  }, []);
+
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
+  if (isVisitedWelcome == null) {
+    return null;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
         <Tab.Navigator
-          initialRouteName="Welcome"
+          initialRouteName={isVisitedWelcome ? "Stocks" : "Welcome"}
           tabBar={Menu}
           screenOptions={{
             headerShown: false,
           }}>
-          {routes.map(route => (
-            <Tab.Screen {...route} />
+          {routes.map((route, index) => (
+            <Tab.Screen key={`route-${index}`} {...route} />
           ))}
         </Tab.Navigator>
       </NavigationContainer>

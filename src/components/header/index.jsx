@@ -1,9 +1,9 @@
-import {View, Text, TouchableOpacity, SafeAreaView} from 'react-native';
+import {View, Text, TouchableOpacity, SafeAreaView} from "react-native";
 
 const Header = ({state, descriptors, navigation}) => {
   return (
     <SafeAreaView>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: "row"}}>
         {state?.routes.map((route, index) => {
           const {options} = descriptors[route.key];
           const label =
@@ -17,7 +17,7 @@ const Header = ({state, descriptors, navigation}) => {
 
           const onPress = () => {
             const event = navigation.emit({
-              type: 'tabPress',
+              type: "tabPress",
               target: route.key,
               canPreventDefault: true,
             });
@@ -29,13 +29,14 @@ const Header = ({state, descriptors, navigation}) => {
 
           const onLongPress = () => {
             navigation.emit({
-              type: 'tabLongPress',
+              type: "tabLongPress",
               target: route.key,
             });
           };
 
           return (
             <TouchableOpacity
+              key={`tab-${index}`}
               accessibilityRole="button"
               accessibilityState={isFocused ? {selected: true} : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -43,7 +44,7 @@ const Header = ({state, descriptors, navigation}) => {
               onPress={onPress}
               onLongPress={onLongPress}
               style={{flex: 1}}>
-              <Text style={{color: isFocused ? '#673ab7' : '#222'}}>
+              <Text style={{color: isFocused ? "#673ab7" : "#222"}}>
                 {label}
               </Text>
             </TouchableOpacity>

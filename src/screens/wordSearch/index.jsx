@@ -20,6 +20,7 @@ import CrosswordQuestions from "../../components/crosswordQuestions";
 import Menu from "../../components/menu";
 import Shadow from "../../components/shadow";
 import CrosswordInitial from "../../components/crossword/CrosswordInitial";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const cellSize = 30;
 const boardSize = crosswords.length;
@@ -36,6 +37,16 @@ const WordSearch = ({navigation, route}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [containerPosition, setContainerPosition] = useState({x: 0, y: 0});
   const [isStartCrossword, setIsStartCrossword] = useState(false);
+
+  const [isVisitedScreen, setIsVisitedScreen] = useState(false);
+  useEffect(() => {
+    const getIsVisit = async () => {
+      const isVisited = await AsyncStorage.getItem("visitedCrossword");
+      setIsVisitedScreen(isVisited);
+    };
+
+    getIsVisit();
+  }, []);
 
   const handleCellPress = (letter, rowIndex, colIndex) => {
     const word = selectedWord + letter;
@@ -168,9 +179,21 @@ const WordSearch = ({navigation, route}) => {
     }
   };
 
+  const onPress = async () => {
+    setIsStartCrossword(true);
+    if (!isVisitedScreen) {
+      try {
+        await AsyncStorage.setItem("visitedCrossword", JSON.stringify(true));
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
   const selectedStyle = getWordStyle(letterIndexes, cellSize, isReversedLine);
   const questionButtons = buttons.map((item, index) => (
     <TouchableOpacity
+      key={`question-button-${index}`}
       activeOpacity={0.5}
       onPressOut={() => handleButtonTouch(index)}
       style={tw`rounded-2xl bg-white p-2 px-8 h-11 mb-1 `}>
@@ -180,13 +203,11 @@ const WordSearch = ({navigation, route}) => {
       </Text>
     </TouchableOpacity>
   ));
-
+  const showInitialScreen = !isVisitedScreen && !isStartCrossword;
   return (
     <SafeAreaView>
-      {!isStartCrossword && (
-        <CrosswordInitial onPress={() => setIsStartCrossword(true)} />
-      )}
-      {isStartCrossword && (
+      {showInitialScreen && <CrosswordInitial onPress={onPress} />}
+      {!showInitialScreen && (
         <View style={tw`h-full`}>
           <DefaultModal
             onClose={() => setIsModalVisible(false)}
@@ -194,9 +215,9 @@ const WordSearch = ({navigation, route}) => {
           />
           <View>
             <ImageBackground
-              style={tw`h-full pt-5 bg-cover bg-top`}
+              style={tw`h-full pt-5`}
               source={images.wordSearchBg}>
-              <View style={tw``}>
+              <View>
                 <View style={tw`flex flex-row justify-center gap-8 mb-5`}>
                   {questionButtons}
                 </View>
@@ -233,7 +254,7 @@ const WordSearch = ({navigation, route}) => {
 
                             return (
                               <TouchableOpacity
-                                key={rowIndex + colIndex}
+                                key={`wordsearch-${rowIndex}-${colIndex}`}
                                 onPressIn={() =>
                                   handleCellPress(letter, rowIndex, colIndex)
                                 }

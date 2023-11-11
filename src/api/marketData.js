@@ -63,13 +63,19 @@ export const fetchCryptoPrices = async () => {
   return response.json();
 };
 
+export const fetchQuizWelcome = async () => {
+  const response = await fetch(process.env.QUIZ_CONTENT_URL);
+
+  return response.json();
+};
+
 const today = moment().format("DD-MM-YYYY");
 export const fetchCryptoByDate = async ({name, date = today}) => {
   try {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${name}/history?date=${date}`,
-    );
-    return response.json();
+    const url = `https://api.coingecko.com/api/v3/coins/${name}/history?date=${date}`;
+    const response = await axios.get(url);
+
+    return response.data;
     // if (!data?.market_data) return null;
     // return {[name]: data.market_data?.current_price[currency]};
   } catch (error) {

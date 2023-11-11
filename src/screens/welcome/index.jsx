@@ -1,7 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import images from "../../assets/images";
 import {Image, ImageBackground, Text, View} from "react-native";
 import tw from "twrnc";
+import WelcomeQuiz from "../../components/welcomeQuiz";
+import {storageVisitedWelcome} from "../../constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const welcomeSlides = [
   {image: images.welcomeFirst, title: "Large selection of cryptocurrency"},
@@ -19,17 +22,27 @@ const stepsLength = welcomeSlides.length - 1;
 const WelcomeScreen = ({navigation}) => {
   const [step, setStep] = useState(0);
 
+  const setIsVisitedWelcome = async () => {
+    try {
+      await AsyncStorage.setItem(storageVisitedWelcome, JSON.stringify(true));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleChangeStep = () => {
     if (step < stepsLength) {
       setStep(step => step + 1);
       return;
     }
+    setIsVisitedWelcome();
     navigation.navigate("Stocks");
   };
 
   return (
     <View>
-      <ImageBackground style={tw` h-full w-full`} source={images.preloader}>
+      <WelcomeQuiz />
+      <ImageBackground style={tw`h-full w-full`} source={images.preloader}>
         <View style={tw`pt-[140px]`}>
           <Image
             source={welcomeSlides[step].image}
@@ -40,25 +53,24 @@ const WelcomeScreen = ({navigation}) => {
           </Text>
         </View>
         <View
-          style={tw`flex flex-row justify-between items-center absolute bottom-5 w-full`}>
+          style={tw`flex flex-row justify-between items-center absolute bottom-10 w-full`}>
           <View style={tw`flex flex-row gap-[2px] ml-[30px]`}>
             {[...Array(3)].map((item, index) => (
               <View
-                key={"welcome-screen-step" + index}
-                style={tw`h-2 w-2 transition-all ${
+                key={`welcome-screen-step-${index}`}
+                style={tw`h-2 w-2 ${
                   index == step ? "bg-white" : "bg-[#939393]"
                 }`}
               />
             ))}
           </View>
-          <View style={tw`rotate-180`} onTouchEnd={handleChangeStep}>
+          <View onTouchEnd={handleChangeStep}>
             <Image
               style={{
                 width: 40,
                 height: 20,
                 marginRight: 30,
                 transform: [{rotate: "180deg"}],
-                filter: "invert(1)",
                 tintColor: "white",
               }}
               source={images.arrowLeft}

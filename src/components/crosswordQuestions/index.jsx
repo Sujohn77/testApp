@@ -18,7 +18,7 @@ const CrosswordQuestions = () => {
           <TouchableOpacity
             style={tw`px-3 border-2 border-white rounded-lg bg-indigo-900 flex items-center justify-center h-[70px] w-[48%]`}
             activeOpacity={0.7}
-            key={key}>
+            key={`question-${key}`}>
             <View>
               <Text style={tw`text-white text-center font-semibold`}>
                 {question}

@@ -129,7 +129,7 @@ const StocksScreen = ({navigation}) => {
                 return (
                   <View
                     style={tw`h-16 p-3 w-full flex flex-row gap-2 mb-3 rounded-md bg-[#6070ff41]`}
-                    key={key}>
+                    key={`stock-${index}`}>
                     {!!stocksImages[key] && (
                       <Image
                         source={stocksImages[key]}
@@ -137,11 +137,11 @@ const StocksScreen = ({navigation}) => {
                       />
                     )}
                     <View style={tw`flex-1`}>
-                      <View style={tw`flex flex-row justify-between w-max `}>
+                      <View style={tw`flex flex-row justify-between`}>
                         <Text style={tw`font-semibold text-sm`}>
                           {stocksList[key]?.title}
                         </Text>
-                        <Text style={tw`font-semibold text-sm w-min `}>
+                        <Text style={tw`font-semibold text-sm`}>
                           {!!stocksPrices[index] && `$${stocksPrices[index]}`}
                         </Text>
                       </View>

@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const getWordStyle = (coords, cellSize, isReverseLine = false) => {
   const length = coords.length;
   if (!length) return "";
@@ -14,6 +16,16 @@ export const getWordStyle = (coords, cellSize, isReverseLine = false) => {
   }
 
   return last?.rowIndex == first.rowIndex ? `w-[${size}] h-[26px]` : "";
+};
+
+export const isQuizFirstVisit = (date = moment("2023-12-11")) => {
+  return moment().isAfter(date, "day");
+};
+
+export const selectCryptoPrices = data => {
+  return data
+    .filter(Boolean)
+    .map(crypto => crypto.market_data.current_price[currency]);
 };
 
 export const findMatches = (searchWords, word) => {

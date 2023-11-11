@@ -1,7 +1,7 @@
 import moment from "moment";
 
 const today = moment().format("YYYY-MM-DD");
-const oldDate = moment(today).subtract(1, "days").format("DD-MM-YYYY");
+const oldDate = moment(today).subtract(1, "days").format("YYYY-MM-DD");
 export const data = [
   {
     date: today,

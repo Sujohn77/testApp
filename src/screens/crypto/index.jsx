@@ -26,8 +26,9 @@ import cryptoImages from "../../assets/images/crypto";
 import FullSizeChart from "../../components/chart/FullSizeChart";
 import images from "../../assets/images";
 import Menu from "../../components/menu";
-import moment from "moment";
+import moment, {duration} from "moment";
 import stocksImages from "../../assets/images/stocks";
+import {selectCryptoPrices} from "../../utils";
 
 const cryptoGraphsNames = {
   BTC: "bitcoin",
@@ -36,22 +37,39 @@ const cryptoGraphsNames = {
 };
 const cryptoIds = Object.keys(cryptoList);
 const yesterday = moment().subtract(1, "days").format("DD-MM-YYYY");
+const graphDuration = 30;
+
 const CryptoScreen = ({navigation}) => {
   const {data} = useQuery("fetchCryptoHistory", () =>
-    fetchCryptoHistory({name: cryptoGraphsNames.BTC, duration: 30}),
+    fetchCryptoHistory({name: cryptoGraphsNames.BTC, duration: graphDuration}),
+  );
+  const [cryptoPrices, setCryptoPrices] = useState([]);
+  const [oldCryptoPrices, setOldCryptoPrices] = useState([]);
+  const {data: graphDurationAgo} = useQuery("fetchCryptoByDate", () =>
+    fetchCryptoByDate({
+      name: cryptoGraphsNames.BTC,
+      date: moment().subtract(duration, "days").format("DD-MM-YYYY"),
+    }),
   );
 
-  const {data: cryptoData} = useQuery("fetchCryptoByDate", () =>
-    Promise.all(cryptoIds.map(name => fetchCryptoByDate({name}))),
-  );
+  useEffect(() => {
+    const getCryptoPrices = async () => {
+      const cryptoPrices = await Promise.all(
+        cryptoIds.map(name => fetchCryptoByDate({name})),
+      );
+      const oldDate = moment().subtract(duration, "days").format("DD-MM-YYYY");
+      const cryptoPricesDurationAgo = await Promise.all(
+        cryptoIds.map(name => fetchCryptoByDate({name, date: oldDate})),
+      );
 
-  const {data: cryptoDayBefore, error} = useQuery("fetchCryptoByDate", () =>
-    Promise.all(
-      cryptoIds.map(name => fetchCryptoByDate({name, date: yesterday})),
-    ),
-  );
+      setOldCryptoPrices(selectCryptoPrices(cryptoPricesDurationAgo));
+      setCryptoPrices(selectCryptoPrices(cryptoPrices));
+    };
 
-  if (!cryptoData || !cryptoDayBefore || !data) {
+    getCryptoPrices();
+  }, []);
+
+  if (!cryptoPrices.length || !data) {
     return (
       <View style={tw`mt-8`}>
         <ActivityIndicator />
@@ -60,13 +78,7 @@ const CryptoScreen = ({navigation}) => {
   }
 
   const graphData = data.prices?.slice(0, 30).map(item => item[1]);
-  const formattedCryptoData = cryptoData
-    .filter(item => !item.status)
-    .map(item => {
-      return {
-        [item.id]: item.market_data?.current_price[currency],
-      };
-    });
+  const graphDiffValue = graphData[graphData.length - 1] - graphDurationAgo;
 
   return (
     <SafeAreaView>
@@ -86,17 +98,17 @@ const CryptoScreen = ({navigation}) => {
                 small={true}
                 data={graphData}
                 symbol={cryptoGraph}
+                graphDiffValue={graphDiffValue}
               />
             )}
             <Text style={tw`text-2xl text-black font-semibold mb-3`}>
               Cryptocurrency Prices
             </Text>
-            {formattedCryptoData.map((item, index) => {
-              const key = Object.keys(item)[0];
-
-              const price =
-                item[key] > 1 ? item[key]?.toFixed(2) : item[key]?.toFixed(4);
-              const yesterdayPrice = cryptoDayBefore ? cryptoDayBefore[key] : 0;
+            {cryptoPrices.map((item, index) => {
+              const price = item > 1 ? item.toFixed(2) : item.toFixed(4);
+              const yesterdayPrice = oldCryptoPrices.length
+                ? oldCryptoPrices[index]
+                : 0;
 
               const percentageDiff = (price / yesterdayPrice - 1) * 100;
               const isGrowth = percentageDiff > 0;
@@ -121,7 +133,7 @@ const CryptoScreen = ({navigation}) => {
                       <Text style={tw`text-slate-500 text-xs`}>
                         {cryptoList[key]?.subTitle}
                       </Text>
-                      {cryptoDayBefore[key] && (
+                      {yesterdayPrice && (
                         <Text
                           style={tw`${
                             isGrowth ? "text-lime-500" : "text-rose-300"

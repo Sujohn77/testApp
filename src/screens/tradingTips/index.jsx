@@ -64,13 +64,21 @@ const TradingTipsScreen = ({navigation}) => {
   const newestTips = data
     .filter(item => moment().isSame(item.date, "day"))
     .map((item, index) =>
-      renderPostRow({item, index, image: tradingTipsImages[1]}),
+      renderPostRow({
+        item,
+        index: `newest-${index}`,
+        image: tradingTipsImages[1],
+      }),
     );
 
   const otherTips = data
     .filter(item => !moment().isSame(item.date, "day"))
     .map((item, index) =>
-      renderPostRow({item, index, image: tradingTipsImages[1]}),
+      renderPostRow({
+        item,
+        index: `other-${index}`,
+        image: tradingTipsImages[1],
+      }),
     );
   return (
     <SafeAreaView>
