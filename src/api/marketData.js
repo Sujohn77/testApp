@@ -2,38 +2,28 @@ import {Alert} from "react-native";
 import {
   cryptoList,
   currency,
+  dateFormat,
   stockGraph,
   stocksIds,
   stocksList,
 } from "../constants";
 import moment from "moment";
 import axios from "axios";
+import {CRYPTO_TOKEN, STOCKS_TOKEN, QUIZ_CONTENT_URL} from "@env";
 
-const durationPeriod = 100;
-const token = "eVV2QnVyUGtyZ3p6cGpINTVyUHdjUjNrLUpxREZXVmI0VWpOMFktdDRMWT0";
+const token = STOCKS_TOKEN;
 
-export const axiosInstance = axios.create({
-  baseURL: "https://api.marketdata.app/v1",
-  headers: {
-    "Content-type": "application/json",
-    Authorization:
-      "Token eVV2QnVyUGtyZ3p6cGpINTVyUHdjUjNrLUpxREZXVmI0VWpOMFktdDRMWT0",
-  },
-});
-
-export const fetchStockData = async ({stock, duration, startDate}) => {
+export const fetchStockData = async ({stock, duration = 2, startDate}) => {
   try {
     const today = startDate
-      ? startDate.format("YYYY-MM-DD")
-      : moment().format("YYYY-MM-DD");
+      ? startDate.format(dateFormat)
+      : moment().subtract(1, "days").format(dateFormat);
     const pastNDays = moment(today)
       .subtract(duration, "days")
-      .format("YYYY-MM-DD");
+      .format(dateFormat);
+    const url = `https://api.marketdata.app/v1/stocks/candles/D/${stock}?from=${pastNDays}&to=${today}&token=${token}`;
 
-    const response = await axios.get(
-      `https://api.marketdata.app/v1/stocks/candles/D/${stock}?from=${pastNDays}&to=${today}&token=${token}`,
-    );
-
+    const response = await axios.get(url);
     return response.data;
   } catch (err) {
     console.log(err);
@@ -64,7 +54,7 @@ export const fetchCryptoPrices = async ({ids}) => {
 };
 
 export const fetchQuizWelcome = async () => {
-  const response = await fetch(process.env.QUIZ_CONTENT_URL);
+  const response = await fetch(QUIZ_CONTENT_URL);
 
   return response.json();
 };
@@ -72,13 +62,46 @@ export const fetchQuizWelcome = async () => {
 const today = moment().format("DD-MM-YYYY");
 export const fetchCryptoByDate = async ({name, date = today}) => {
   try {
-    const url = `https://api.coingecko.com/api/v3/coins/${name}/history?date=${date}?x_cg_pro_api_key=ecaf5b3d-b1c8-4141-8778-289f93f28787`;
+    const url = `https://api.coingecko.com/api/v3/coins/${name}/history?date=${date}?x_cg_pro_api_key=${CRYPTO_TOKEN}`;
+
     const response = await axios.get(url);
 
     return response.data;
-    // if (!data?.market_data) return null;
-    // return {[name]: data.market_data?.current_price[currency]};
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
+// const cryptoIds = Object.keys(cryptoList);
+// export const fetchCrypto = async ({name, date = today}) => {
+//   const url = `https://api.coingecko.com/api/v3/coins/${name}/history?date=${date}?x_cg_pro_api_key=${CRYPTO_TOKEN}`;
+
+//   const response = await axios.get(url);
+
+//   return response.data;
+// };
+// const delay = 3000;
+// const maxRetries = 2;
+// export const retryRequest = async ({ids = cryptoIds, date}) => {
+//   let retries = 0;
+
+//   while (retries < maxRetries) {
+//     try {
+//       const result = await Promise.all(
+//         ids.map(name => fetchCrypto({name, date})),
+//       );
+//       if (result !== null && result != undefined) {
+//         return result;
+//       }
+//     } catch (error) {
+//       // Request failed, wait and retry
+//       console.log(
+//         `Retry ${retries + 1}/${maxRetries}. Waiting for ${
+//           delay * 2 ** retries
+//         } milliseconds.`,
+//       );
+//       await new Promise(resolve => setTimeout(resolve, delay * 2 ** retries));
+//       retries++;
+//     }
+//   }
+//   return [];
+// };

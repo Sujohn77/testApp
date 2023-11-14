@@ -26,7 +26,7 @@ export const isQuizFirstVisit = (date = moment("2023-12-11")) => {
 export const selectCryptoPrices = data => {
   let prices = {};
   for (let item of data) {
-    if (item) {
+    if (item?.market_data) {
       prices = {
         ...prices,
         [item.id]: {

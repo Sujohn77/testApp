@@ -1,0 +1,65 @@
+{
+  "welcome_slide1": "Große Auswahl an Kryptowährungen",
+  "welcome_slide2": "Investieren Sie in Aktien erfolgreicher Unternehmen",
+  "welcome_slide3": "Werde erfolgreich durch automatisierten Handel",
+  "crypto_title": "Krypto Tracker",
+  "crypto_subtitle": "Kryptowährungspreise",
+  "stocks_title": "Aktien",
+  "stocks_info_title": "Informationsblock",
+  "stocks_info_text": "Wie kann künstliche Intelligenz verwendet werden, um ein Trader zu werden?",
+  "stocks_subtitle": "Aktienpreise",
+  "stocks_post_text": "",
+  "wordsearch_button_answer": "Antwort",
+  "wordsearch_button_reset": "Zurücksetzen",
+  "wordsearch_question1": "Rolle der KI bei der Aktienauswahl?",
+  "wordsearch_question2": "Beitrag der KI zur Investition?",
+  "wordsearch_question3": "Was sind Robo-Advisors?",
+  "wordsearch_question4": "Was verbessert KI in der Anlageplanung?",
+  "wordsearch_question5": "Was verarbeiten KI-Algorithmen für die Aktienanalyse?",
+  "wordsearch_question6": "Was ist ein wichtiger Markt für den Devisenhandel?",
+  "wordsearch_answers": "Antworten",
+  "tips_title": "Handelstipps",
+  "tips_subtitle": "Tipps, die Sie zu einem erfolgreichen Trader machen",
+  "tips_newest": "Neueste",
+  "tips_oldest": "Älteste",
+
+  "tip_title1": "Informiert bleiben: Die Grundlage für intelligentes Trading",
+  "tip_subtitle1": "Wissen ist Macht in den Finanzmärkten",
+  "tip_description1": "Erfolgreiches Trading beginnt mit einem soliden Verständnis der Finanzlandschaft.\nBleiben Sie über Marktnachrichten, wirtschaftliche Indikatoren und globale Ereignisse auf dem Laufenden, die die Preise von Vermögenswerten beeinflussen können.\nNutzen Sie seriöse Finanznachrichtenquellen, Analysetools und Marktberichte, um fundierte Entscheidungen zu treffen.\nEin sachkundiger Trader ist ein ermächtigter Trader.\n\nZusätzlich zu Echtzeitinformationen kann historische Daten wertvolle Zusammenhänge bieten.\nDas Verständnis, wie Märkte in der Vergangenheit auf ähnliche Situationen reagiert haben, kann Einblicke in mögliche zukünftige Entwicklungen geben.\nKontinuierliches Lernen und Informiertbleiben bilden die Grundlage für fundierte und strategische Handelsentscheidungen.",
+
+  "tip_title2": "Entwickeln Sie einen robusten Handelsplan: Ihre Roadmap zum Erfolg",
+  "tip_subtitle2": "Erstellung eines Blaupausen für profitables Trading",
+  "tip_description2": "Ein umfassender Handelsplan ist das Rückgrat des erfolgreichen Handels.\nDefinieren Sie Ihre Ziele, Risikotoleranz und bevorzugten Handelsstil.\nLegen Sie klare Ein- und Ausstiegspunkte fest, setzen Sie realistische Gewinnziele und implementieren Sie Risikomanagementstrategien.\nEin durchdachter Plan dient als Ihr Leitfaden durch die oft turbulenten Gewässer der Finanzmärkte.\n\nÜberprüfen und aktualisieren Sie regelmäßig Ihren Handelsplan, um sich an veränderte Marktbedingungen anzupassen.\nMärkte entwickeln sich, und was in der Vergangenheit funktioniert hat, ist möglicherweise in der Zukunft nicht mehr so effektiv.\nFlexibilität und die Fähigkeit, Ihren Plan anzupassen, sind entscheidend für langfristigen Erfolg.",
+
+  "tip_title3": "Risikomanagement: Schutz Ihres Kapitals",
+  "tip_subtitle3": "Absichern Ihrer Investitionen in volatilen Märkten",
+  "tip_description3": "Die Risikominderung ist beim Trading von entscheidender Bedeutung.\nSetzen Sie Stop-Loss-Orders, um potenzielle Verluste zu begrenzen, diversifizieren Sie Ihr Portfolio und setzen Sie nicht Ihr gesamtes Kapital in einen einzigen Trade.\nDas Verständnis und die Verwaltung von Risiken gewährleisten, dass eine Verlustserie Ihr Handelskonto nicht zerstört und Ihnen ermöglichen, Marktfluktuationen effektiver zu überstehen.\n\nBetrachten Sie das Konzept der Positionsgrößenbestimmung.\nBestimmen Sie den geeigneten Betrag für jeden Trade basierend auf der Größe Ihres Gesamtportfolios und Ihrer Risikotoleranz.\nDies hilft, die Auswirkungen einzelner Trades auf Ihr Kapital zu kontrollieren.",
+
+  "tip_title4": "Umarmen Sie die technische Analyse: Ihren Kurs durch Diagramme festlegen",
+  "tip_subtitle4": "Entschlüsselung von Markttrends durch technische Analyse",
+  "tip_description4": "Die technische Analyse beinhaltet das Studium von Preisdiagrammen und die Verwendung historischer Daten, um zukünftige Preisbewegungen vorherzusagen.\nLernen Sie, Schlüsseltechnische Indikatoren, Muster und Trends zu interpretieren.\nDieser analytische Ansatz bietet wertvolle Einblicke in die Marktsentiment, um fundierte Entscheidungen zu treffen und potenzielle Ein- und Ausstiegspunkte zu identifizieren.\n\nChartmuster wie Kopf und Schultern oder Doppeltops und -böden können auf potenzielle Trendumkehrungen hinweisen.\nDas Verständnis der technischen Analyse erleichtert nicht nur das Timing Ihrer Trades, sondern verbessert auch Ihr allgemeines Marktverständnis.",
+
+  "tip_title5": "Kontinuierliches Lernen: Entwicklung mit den Märkten",
+  "tip_subtitle5": "Die lebenslange Reise eines erfolgreichen Traders",
+  "tip_description5": "Die Finanzmärkte sind dynamisch, und um vorne zu bleiben, ist ein Engagement für kontinuierliches Lernen erforderlich.\nErkunden Sie neue Handelsstrategien, bleiben Sie auf dem Laufenden mit aufkommenden Markttrends und passen Sie sich Änderungen in den Marktbedingungen an.\nDie erfolgreichsten Trader sind diejenigen, die das Lernen als eine lebenslange Reise betrachten.\n\nNehmen Sie an Webinaren teil, lesen Sie Finanzliteratur und interagieren Sie mit der Handelsgemeinschaft.\nDas Netzwerken mit anderen Tradern kann neue Perspektiven und Einblicke bieten.\nEine Wachstumsmentalität ist ein Schlüsselmerkmal erfolgreicher Trader.",
+
+  "tip_title6": "Geduld zahlt sich aus: Vermeiden Sie impulsive Handlungen",
+  "tip_subtitle6": "Die Tugend der Geduld beim Trading",
+  "tip_description6": "Impulsivität kann der schlimmste Feind eines Traders sein.\nWiderstehen Sie dem Drang, Entscheidungen aufgrund von Emotionen oder kurzfristigen Marktschwankungen zu treffen.\nWarten Sie geduldig auf Ihre vorher festgelegten Ein- und Ausstiegspunkte und vermeiden Sie das Verfolgen des Marktes.\nGeduld ist eine Tugend, die oft erfolgreiche Trader von denen unterscheidet, die Schwierigkeiten haben, Konsistenz zu finden.\n\nEntwickeln Sie einen disziplinierten Ansatz beim Trading.\nVerhängen Sie eine Wartezeit, bevor Sie Trades ausführen, um impulsive Entscheidungen zu vermeiden.\nGeduld ermöglicht es Ihnen, Trades zu optimalen Zeitpunkten einzugehen und verringert die Wahrscheinlichkeit kostspieliger Fehler.",
+
+  "tip_title7": "Emotionen im Griff behalten: Die Psychologie des Tradings",
+  "tip_subtitle7": "Beherrschen Sie Ihre Emotionen für rationale Entscheidungsfindung",
+  "tip_description7": "Trading kann emotional aufgeladen sein, und Emotionen können das Urteilsvermögen trüben.\nEntwickeln Sie emotionale Intelligenz, um unter Druck ruhig zu bleiben.\nHalten Sie sich an Ihren Handelsplan, ob Sie sich in einer Gewinn- oder Verlustserie befinden.\nDas Verständnis Ihrer eigenen psychologischen Neigungen ist entscheidend, um einen disziplinierten und rationalen Ansatz beim Trading beizubehalten.\n\nImplementieren Sie Achtsamkeitstechniken wie tiefe Atmung oder Meditation, um während volatiler Marktperioden konzentriert zu bleiben.\nEmotionale Stabilität ist ein Merkmal erfolgreicher Trader, die die Höhen und Tiefen der Finanzmärkte meistern können.",
+
+  "tip_title8": "Diversifizieren Sie Ihr Portfolio: Risiken streuen",
+  "tip_subtitle8": "Aufbau von Widerstandsfähigkeit durch Portfolio-Diversifikation",
+  "tip_description8": "Setzen Sie nicht alle Eier in einen Korb.\nDiversifizieren Sie Ihr Portfolio über verschiedene Anlageklassen, Branchen und geografische Regionen, um Risiken zu streuen und die Auswirkungen einer schlecht performenden Anlage zu minimieren.\nEin gut diversifiziertes Portfolio ist widerstandsfähiger gegenüber Marktschwankungen.\n\nBeachten Sie die Korrelation zwischen Vermögenswerten bei der Diversifizierung.\nWählen Sie idealerweise Vermögenswerte, die nicht perfekt synchron bewegen, da dies eine effektivere Absicherung gegen Marktschwankungen ermöglicht.\nPassen Sie regelmäßig Ihr Portfolio an, um die gewünschte Vermögensallokation beizubehalten.",
+
+  "tip_title9": "Wählen Sie den richtigen Broker: Ihr Handelspartner",
+  "tip_subtitle9": "Navigation durch die Finanzmärkte mit dem richtigen Broker",
+  "tip_description9": "Die Auswahl des richtigen Brokers ist entscheidend für den Erfolg.\nBerücksichtigen Sie Faktoren wie Handelsgebühren, Plattformfunktionen, Kundensupport und die Palette handelbarer Vermögenswerte.\nEine zuverlässige und benutzerfreundliche Handelsplattform kann Ihre gesamte Handelserfahrung und Effizienz verbessern.\n\nBewerten Sie den Ruf und die regulatorische Einhaltung des Brokers.\nLesen Sie Benutzerbewertungen und berücksichtigen Sie die Qualität des Kundenservice.\nIhr Broker ist Ihr Gateway zu den Finanzmärkten, daher wählen Sie einen, der zu Ihrem Handelsst",
+
+  "tip_title10": "Bewerten und Anpassen: Der Schlüssel zum langfristigen Erfolg",
+  "tip_subtitle10": "Aus Erfahrungen lernen und Strategien anpassen",
+  "tip_description10": "Bewerten Sie regelmäßig Ihre Handelsleistung.\nAnalysieren Sie Ihre Erfolge und Misserfolge, identifizieren Sie Bereiche zur Verbesserung und passen Sie Ihre Strategien entsprechend an.\nDie Fähigkeit, aus Erfahrungen zu lernen und Ihre Herangehensweise anzupassen, ist entscheidend für langfristigen Erfolg in der sich ständig verändernden Welt des Handels.\n\nFühren Sie ein Handelstagebuch, um Ihre Entscheidungen und Ergebnisse zu dokumentieren.\nDie Überprüfung Ihres Journals kann Muster in Ihrem Handelsverhalten aufdecken und Bereiche zur Verbesserung hervorheben.\nSeien Sie bereit, Ihre Strategien auf Basis der Marktbedingungen und des persönlichen Wachstums als Trader weiterzuentwickeln."
+}

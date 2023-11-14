@@ -1,7 +1,8 @@
 import moment from "moment";
+import {useTranslation} from "react-i18next";
 
-const today = moment().format("YYYY-MM-DD");
-const oldDate = moment(today).subtract(1, "days").format("YYYY-MM-DD");
+const today = moment().format(dateFormat);
+const oldDate = moment(today).subtract(1, "days").format(dateFormat);
 export const data = [
   {
     date: today,

@@ -1,11 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
 import {useQuery} from "react-query";
 import tw from "twrnc";
-import {
-  fetchCryptoByDate,
-  fetchCryptoPrices,
-  fetchCryptoHistory,
-} from "../../api/marketData";
+import {fetchCryptoByDate, fetchCryptoHistory} from "../../api/marketData";
 import {
   ActivityIndicator,
   Image,
@@ -27,6 +23,9 @@ import moment from "moment";
 
 import {selectCryptoPrices} from "../../utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useTranslation} from "react-i18next";
+import {translate} from "../../localization";
+import i18next from "../../localization";
 
 const cryptoGraphsNames = {
   BTC: "bitcoin",
@@ -38,6 +37,7 @@ const yesterday = moment().subtract(1, "days").format("DD-MM-YYYY");
 const graphDuration = 30;
 
 const CryptoScreen = ({navigation}) => {
+  const {t} = useTranslation();
   const {data} = useQuery("fetchCryptoHistory", () =>
     fetchCryptoHistory({name: cryptoGraphsNames.BTC, duration: graphDuration}),
   );
@@ -47,9 +47,12 @@ const CryptoScreen = ({navigation}) => {
   useEffect(() => {
     const getCachedPrices = async () => {
       const prices = await AsyncStorage.getItem("cryptoPrices");
-      if (!JSON.parse(prices)) {
-        !cryptoPrices && setCryptoPrices(prices);
-      }
+      !JSON.parse(prices) && setCryptoPrices(prices);
+    };
+
+    const getCachedOldPrices = async () => {
+      const oldPrices = await AsyncStorage.getItem("oldCryptoPrices");
+      !JSON.parse(oldPrices) && setOldCryptoPrices(oldPrices);
     };
 
     const getCryptoPrices = async () => {
@@ -57,21 +60,49 @@ const CryptoScreen = ({navigation}) => {
         cryptoIds.map(name => fetchCryptoByDate({name})),
       );
       const oldDate = moment().subtract(1, "days").format("DD-MM-YYYY");
+
       const cryptoPricesDurationAgo = await Promise.all(
         cryptoIds.map(name => fetchCryptoByDate({name, date: oldDate})),
       );
-
       const updatedNewPrices = selectCryptoPrices(cryptoPrices);
       const updatedOldPrices = selectCryptoPrices(cryptoPricesDurationAgo);
-      if (!Object.keys(cryptoPrices).length) {
+      const updatedCryptoLength = Object.keys(updatedNewPrices).length;
+      const updatedOldCryptoLength = Object.keys(updatedOldPrices).length;
+      const stateCryptoPricesLength = Object.keys(cryptoPrices).length;
+      const stateOldCryptoPricesLength = Object.keys(oldCryptoPrices).length;
+      const lastUpdatedCrypto =
+        updatedCryptoLength >= cryptoIds.length - 1
+          ? updatedNewPrices[Object.keys(updatedNewPrices)[0]]
+          : {};
+      const firstOldDateCrypto =
+        updatedOldCryptoLength > 0
+          ? updatedOldPrices[Object.keys(updatedOldPrices)[0]]
+          : {};
+
+      // set caches if there was reached rate limit for api requests
+      const isLoadCachedPrices =
+        (!lastUpdatedCrypto?.price && !stateCryptoPricesLength) ||
+        !updatedCryptoLength;
+      const isLoadCachedOldPrices =
+        (!firstOldDateCrypto?.price && !stateOldCryptoPricesLength) ||
+        !updatedOldCryptoLength;
+
+      if (isLoadCachedPrices) {
         getCachedPrices();
-        return;
+      } else {
+        setCryptoPrices(updatedNewPrices);
+        const value = JSON.stringify(updatedNewPrices);
+        updatedCryptoLength && AsyncStorage.setItem("cryptoPrices", value);
       }
+      if (isLoadCachedOldPrices) {
+        getCachedOldPrices();
+      } else {
+        setOldCryptoPrices(updatedOldPrices);
 
-      setCryptoPrices(updatedNewPrices);
-      setOldCryptoPrices(updatedOldPrices);
-
-      AsyncStorage.setItem("cryptoPrices", JSON.stringify(updatedNewPrices));
+        const value = JSON.stringify(updatedOldPrices);
+        updatedOldCryptoLength &&
+          AsyncStorage.setItem("oldCryptoPrices", value);
+      }
     };
 
     getCryptoPrices();
@@ -86,9 +117,11 @@ const CryptoScreen = ({navigation}) => {
   }
 
   const graphData = data.prices?.slice(0, 30).map(item => item[1]);
-  const graphDiffValue = (graphData[graphData.length - 1] - graphData[0]) / 100;
-  const isLoadedPrices =
-    !!Object.keys(oldCryptoPrices).length && !!Object.keys(cryptoPrices).length;
+  const graphDiffValue = graphData
+    ? (graphData[graphData.length - 1] - graphData[0]) / 100
+    : "";
+  const isLoadedPrices = !!Object.keys(cryptoPrices).length;
+
   return (
     <SafeAreaView>
       <ScrollView contentContainerStyle={tw`pb-5`}>
@@ -97,7 +130,7 @@ const CryptoScreen = ({navigation}) => {
           <View
             style={tw`relative px-3 -mt-3 py-5 bg-white min-h-[600px] rounded-2xl w-full`}>
             <Text style={tw`text-center text-[28px] font-semibold mb-3`}>
-              Crypto tracker
+              {t("crypto_title")}
             </Text>
             {graphData && (
               <FullSizeChart
@@ -111,7 +144,7 @@ const CryptoScreen = ({navigation}) => {
               />
             )}
             <Text style={tw`text-2xl text-black font-semibold mb-3`}>
-              Cryptocurrency Prices
+              {t("crypto_subtitle")}
             </Text>
             {isLoadedPrices ? (
               Object.keys(cryptoPrices).map((key, index) => {
@@ -120,11 +153,18 @@ const CryptoScreen = ({navigation}) => {
                   item.price > 1
                     ? item.price?.toFixed(2)
                     : item.price?.toFixed(4);
-                const yesterdayPrice = oldCryptoPrices[key].price;
-                const percentageDiff = (item.price / yesterdayPrice - 1) * 100;
+                const yesterdayPrice = oldCryptoPrices[key]
+                  ? oldCryptoPrices[key].price
+                  : null;
+                const percentageDiff = yesterdayPrice
+                  ? (item.price / yesterdayPrice - 1) * 100
+                  : "";
+
                 const isGrowth = percentageDiff > 0;
                 const percentageSign = isGrowth ? "+" : "";
-
+                if (!yesterdayPrice) {
+                  return null;
+                }
                 return (
                   <View
                     style={tw`h-16 px-3 w-full flex flex-row gap-2`}
@@ -136,13 +176,17 @@ const CryptoScreen = ({navigation}) => {
                     <View style={tw`flex-1`}>
                       <View style={tw`flex flex-row justify-between`}>
                         <Text style={tw`font-semibold text-sm`}>
-                          {cryptoList[key]?.title}
+                          {top25Cryptos[key]?.title}
                         </Text>
-                        <Text style={tw`font-semibold text-sm `}>${price}</Text>
+                        {price && (
+                          <Text style={tw`font-semibold text-sm `}>
+                            ${price}
+                          </Text>
+                        )}
                       </View>
                       <View style={tw`flex flex-row justify-between gap-2`}>
                         <Text style={tw`text-slate-500 text-xs`}>
-                          {cryptoList[key]?.subTitle}
+                          {top25Cryptos[key]?.subTitle}
                         </Text>
                         {yesterdayPrice ? (
                           <Text

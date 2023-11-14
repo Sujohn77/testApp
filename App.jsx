@@ -6,7 +6,6 @@ import {QueryClient, QueryClientProvider} from "react-query";
 import WordSearch from "./src/screens/wordSearch";
 import CryptoScreen from "./src/screens/crypto";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {Alert, StyleSheet} from "react-native";
 
 import Menu from "./src/components/menu";
 import StocksPost from "./src/screens/stocksPost";
@@ -17,8 +16,7 @@ import {useEffect, useState} from "react";
 import SplashScreen from "react-native-splash-screen";
 import {storageVisitedWelcome} from "./src/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {isQuizFirstVisit} from "./src/utils";
-import WelcomeQuiz from "./src/components/welcomeQuiz";
+import WelcomeQuiz from "./src/screens/welcomeQuiz";
 
 const queryClient = new QueryClient();
 
@@ -28,11 +26,12 @@ const routes = [
     component: CryptoScreen,
   },
   {name: "Stocks", component: StocksScreen},
+  {name: "WelcomeQuiz", component: WelcomeQuiz},
   {name: "WordSearch", component: WordSearch},
   {name: "TradingTips", component: TradingTipsScreen},
   {name: "TradingTipsPost", component: TradingTipsPost},
   {name: "Welcome", component: WelcomeScreen},
-  {name: "WelcomeQuiz", component: WelcomeQuiz},
+
   {
     name: "StocksPost",
     component: StocksPost,
@@ -52,24 +51,18 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      SplashScreen.hide();
-    }, 300);
+    SplashScreen.hide();
   }, []);
 
   if (isVisitedWelcome == null) {
     return null;
   }
 
-  const isQuiz = isQuizFirstVisit();
-
   return (
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
         <Tab.Navigator
-          initialRouteName={
-            isQuiz ? "WelcomeQuiz" : isVisitedWelcome ? "Stocks" : "Welcome"
-          }
+          initialRouteName={!isVisitedWelcome ? "Stocks" : "Welcome"}
           tabBar={Menu}
           screenOptions={{
             headerShown: false,

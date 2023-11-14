@@ -37,33 +37,27 @@ export const cryptoList = {
 };
 
 export const top25Cryptos = {
-  bitcoin: { id: 'bitcoin', title: 'Bitcoin', subTitle: 'BTC' },
-  ethereum: { id: 'ethereum', title: 'Ethereum', subTitle: 'ETH' },
-  binancecoin: { id: 'binancecoin', title: 'Binance Coin', subTitle: 'BNB' },
-  solana: { id: 'solana', title: 'Solana', subTitle: 'SOL' },
-  ripple: { id: 'ripple', title: 'XRP', subTitle: 'XRP' },
-  cardano: { id: 'cardano', title: 'Cardano', subTitle: 'ADA' },
-  polkadot: { id: 'polkadot', title: 'Polkadot', subTitle: 'DOT' },
-  dogecoin: { id: 'dogecoin', title: 'Dogecoin', subTitle: 'DOGE' },
-  uniswap: { id: 'uniswap', title: 'Uniswap', subTitle: 'UNI' },
-  chainlink: { id: 'chainlink', title: 'Chainlink', subTitle: 'LINK' },
-  litecoin: { id: 'litecoin', title: 'Litecoin', subTitle: 'LTC' },
-  algorand: { id: 'algorand', title: 'Algorand', subTitle: 'ALGO' },
-  stellar: { id: 'stellar', title: 'Stellar', subTitle: 'XLM' },
-  filecoin: { id: 'filecoin', title: 'Filecoin', subTitle: 'FIL' },
-  tron: { id: 'tron', title: 'TRON', subTitle: 'TRX' },
-  tezos: { id: 'tezos', title: 'Tezos', subTitle: 'XTZ' },
-  eos: { id: 'eos', title: 'EOS', subTitle: 'EOS' },
-  monero: { id: 'monero', title: 'Monero', subTitle: 'XMR' },
-  dash: { id: 'dash', title: 'Dash', subTitle: 'DASH' },
-  neo: { id: 'neo', title: 'NEO', subTitle: 'NEO' },
+  // bitcoin: {id: "bitcoin", title: "Bitcoin", subTitle: "BTC"},
+  ethereum: {id: "ethereum", title: "Ethereum", subTitle: "ETH"},
+  binancecoin: {id: "binancecoin", title: "Binance Coin", subTitle: "BNB"},
+  solana: {id: "solana", title: "Solana", subTitle: "SOL"},
+  ripple: {id: "ripple", title: "XRP", subTitle: "XRP"},
+  cardano: {id: "cardano", title: "Cardano", subTitle: "ADA"},
+  polkadot: {id: "polkadot", title: "Polkadot", subTitle: "DOT"},
+  dogecoin: {id: "dogecoin", title: "Dogecoin", subTitle: "DOGE"},
+  chainlink: {id: "chainlink", title: "Chainlink", subTitle: "LINK"},
+  litecoin: {id: "litecoin", title: "Litecoin", subTitle: "LTC"},
+  algorand: {id: "algorand", title: "Algorand", subTitle: "ALGO"},
+  uniswap: {id: "uniswap", title: "Uniswap", subTitle: "UNI"},
+  stellar: {id: "stellar", title: "Stellar", subTitle: "XLM"},
+  filecoin: {id: "filecoin", title: "Filecoin", subTitle: "FIL"},
+  tron: {id: "tron", title: "TRON", subTitle: "TRX"},
+  tezos: {id: "tezos", title: "Tezos", subTitle: "XTZ"},
+  eos: {id: "eos", title: "EOS", subTitle: "EOS"},
+  monero: {id: "monero", title: "Monero", subTitle: "XMR"},
+  dash: {id: "dash", title: "Dash", subTitle: "DASH"},
+  neo: {id: "neo", title: "NEO", subTitle: "NEO"},
 };
-
-
-
-
-
-
 
 export const stocksList = {
   AAPL: {
@@ -110,7 +104,6 @@ export const stocksList = {
     title: "AMZN",
     subTitle: "Amazon.com, Inc.",
   },
-
 };
 
 export const stocksIds = Object.keys(stocksList);
@@ -150,3 +143,4 @@ export const stocksImageText =
   "How can artificial intelligence be used to become a trader?";
 
 export const storageVisitedWelcome = "isVisitedWelcome";
+export const dateFormat = "DD-MM-YYYY";

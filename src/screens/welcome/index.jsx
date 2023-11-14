@@ -2,31 +2,31 @@ import React, {useEffect, useState} from "react";
 import images from "../../assets/images";
 import {Image, ImageBackground, Text, View} from "react-native";
 import tw from "twrnc";
-import WelcomeQuiz from "../../components/welcomeQuiz";
+
 import {storageVisitedWelcome} from "../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useTranslation} from "react-i18next";
 
 const welcomeSlides = [
-  {image: images.welcomeFirst, title: "Large selection of cryptocurrency"},
+  {image: images.welcomeFirst},
   {
     image: images.welcomeSecond,
-    title: "Invest in shares of successful companies",
   },
   {
     image: images.welcomeThird,
-    title: "Become successful through automated trading",
   },
 ];
 
 const stepsLength = welcomeSlides.length - 1;
 const WelcomeScreen = ({navigation}) => {
+  const {t} = useTranslation();
   const [step, setStep] = useState(0);
 
   const setIsVisitedWelcome = async () => {
     try {
       await AsyncStorage.setItem(storageVisitedWelcome, JSON.stringify(true));
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -41,19 +41,18 @@ const WelcomeScreen = ({navigation}) => {
 
   return (
     <View>
-      <WelcomeQuiz />
       <ImageBackground style={tw`h-full w-full`} source={images.preloader}>
-        <View style={tw`pt-[140px]`}>
+        <View style={tw`pt-[100px]`}>
           <Image
             source={welcomeSlides[step].image}
             style={tw`h-[350px] w-full mb-5`}
           />
           <Text style={tw`text-white text-4xl font-semibold ml-[30px] mt-2`}>
-            {welcomeSlides[step].title}
+            {t(`welcome_slide${step + 1}`)}
           </Text>
         </View>
         <View
-          style={tw`flex flex-row justify-between items-center absolute bottom-10 w-full`}>
+          style={tw`flex flex-row justify-between items-center absolute bottom-40 w-full`}>
           <View style={tw`flex flex-row gap-[2px] ml-[30px]`}>
             {[...Array(3)].map((item, index) => (
               <View

@@ -9,8 +9,9 @@ const iconNames = Object.keys(icons);
 const navLinks = {
   [iconNames[0]]: "Crypto",
   [iconNames[1]]: "Stocks",
-  [iconNames[2]]: "WordSearch",
-  [iconNames[3]]: "Crypto",
+  [iconNames[2]]: "WelcomeQuiz",
+  [iconNames[3]]: "WordSearch",
+  [iconNames[4]]: "Crypto",
 };
 
 export const excludeRoutes = ["StocksPost", "TradingTipsPost", "Welcome"];
@@ -36,7 +37,12 @@ const Menu = ({state, navigation}) => {
           <View onTouchEnd={() => navigate(item.name)}>
             <Image
               source={icons[item.name.toLowerCase()]}
-              style={tw`w-[35px] h-[35px] ${isActive ? "-mt-7" : ""}`}
+              tintColor="white"
+              style={tw`${
+                item.name == "WelcomeQuiz"
+                  ? "w-[40px] h-[40px]"
+                  : "w-[35px] h-[35px]"
+              } ${isActive ? "-mt-7" : ""}`}
               width={25}
               height={25}
             />

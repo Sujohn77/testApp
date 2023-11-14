@@ -80,7 +80,7 @@ const FullSizeChart = ({
             isGrowth ? "bg-[#DCFFCC]" : "bg-rose-500"
           }  px-2 py-1 rounded-lg absolute top-2 right-4`}>
           <Text
-            style={tw`text-md ${
+            style={tw` ${
               isGrowth ? "text-[#049C6B]" : "text-rose-200"
             }  font-semibold text-center`}>
             {growthSign}

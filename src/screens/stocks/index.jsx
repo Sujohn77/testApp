@@ -25,39 +25,51 @@ import {
 } from "../../constants";
 
 import FullSizeChart from "../../components/chart/FullSizeChart";
-import axios from "axios";
-import Menu from "../../components/menu";
+
 import LinearGradient from "react-native-linear-gradient";
 import {useRoute} from "@react-navigation/native";
 import moment from "moment";
 import stocksImages from "../../assets/images/stocks";
 import Shadow from "../../components/shadow";
-import WelcomeQuiz from "../../components/welcomeQuiz";
+import {useTranslation} from "react-i18next";
 
 const StocksScreen = ({navigation}) => {
+  const {t} = useTranslation();
   const {data: graphData} = useQuery("fetchStockHistory", () =>
     fetchStockData({stock: stockGraph, duration: 30}),
   );
 
-  const {data: stocksData} = useQuery("fetchStocksData", () =>
-    Promise.all(
-      stocksIds.map(stock => fetchStockData({stock: stock, duration: 1})),
-    ),
-  );
+  const [stocksData, setStocksData] = useState([]);
+  const [stocksDayBefore, setStocksDayBefore] = useState([]);
 
-  const {data: stocksDayBefore, error} = useQuery("fetchStocksDataByDate", () =>
-    Promise.all(
-      stocksIds.map(stock =>
-        fetchStockData({
-          stock: stock,
-          duration: 1,
-          startDate: moment().subtract(1, "days"),
-        }),
-      ),
-    ),
-  );
+  useEffect(() => {
+    const fetchStocks = async () => {
+      const data = await Promise.all(
+        stocksIds.map(stock =>
+          fetchStockData({
+            stock: stock,
+            duration: 1,
+            startDate: moment().subtract(2, "days"),
+          }),
+        ),
+      );
+      const previousData = await Promise.all(
+        stocksIds.map(stock =>
+          fetchStockData({
+            stock: stock,
+            duration: 1,
+            startDate: moment().subtract(3, "days"),
+          }),
+        ),
+      );
+      console.log(data);
+      setStocksData(data.filter(item => item?.c));
+      setStocksDayBefore(previousData.filter(item => item?.c));
+    };
+    fetchStocks();
+  }, []);
 
-  if (!graphData) {
+  if (!graphData && !stocksData.length) {
     return (
       <View style={tw`mt-8`}>
         <ActivityIndicator />
@@ -65,10 +77,10 @@ const StocksScreen = ({navigation}) => {
     );
   }
   const stocksPrices = stocksData
-    ?.filter(stock => stock?.c)
+    .filter(stock => stock?.c[0])
     .map(stock => stock.c[0]);
   const stocksPricesDayBefore = stocksDayBefore
-    ?.filter(stock => stock?.c)
+    .filter(stock => stock?.c[0])
     .map(stock => stock.c[0]);
 
   return (
@@ -77,7 +89,7 @@ const StocksScreen = ({navigation}) => {
         <View style={tw`h-full`}>
           <LinearGradient colors={["#9D57E3", "#0046CD"]} style={tw`py-4`}>
             <Text style={tw`text-center font-semibold text-3xl text-white`}>
-              Stocks
+              {t("stocks_title")}
             </Text>
           </LinearGradient>
           <View style={tw`mt-3 py-1 mx-5`}>
@@ -88,14 +100,14 @@ const StocksScreen = ({navigation}) => {
               symbol={stockGraph}
             />
             <Text style={tw`text-2xl text-black font-semibold mb-3`}>
-              Information block
+              {t("stocks_info_title")}
             </Text>
             <Shadow
               color={"rgb(67,5,202,0.7)"}
               onPress={() =>
                 navigation.navigate("StocksPost", {
-                  text: stocksPostText,
-                  imageText: stocksImageText,
+                  text: t("stocks_post_text"),
+                  imageText: t("stocks_info_text"),
                   imageName: "textBanner",
                 })
               }>
@@ -109,13 +121,13 @@ const StocksScreen = ({navigation}) => {
                   overflow: "hidden",
                 }}>
                 <Text style={tw`font-semibold text-white text-xl w-[50%]`}>
-                  How can artificial intelligence be used to become a trader?
+                  {t("stocks_info_text")}
                 </Text>
               </ImageBackground>
             </Shadow>
 
             <Text style={tw`text-2xl text-black font-semibold my-2 mt-4`}>
-              Stocks Prices
+              {t("stocks_subtitle")}
             </Text>
             {!!stocksData ? (
               stocksIds.map((key, index) => {

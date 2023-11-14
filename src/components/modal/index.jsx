@@ -9,8 +9,10 @@ import {
 } from "react-native";
 import tw from "twrnc";
 import {searchWords} from "../../constants";
-import {capitalize} from "../../utils";
+
+import {useTranslation} from "react-i18next";
 const DefaultModal = ({onClose, visible}) => {
+  const {t} = useTranslation();
   const words = searchWords.map((word, key) => (
     <View key={`search-word-${key}`}>
       <Text
@@ -26,7 +28,7 @@ const DefaultModal = ({onClose, visible}) => {
             <View
               style={tw`h-[300px] pt-4 px-6 w-[80%] bg-white shadow-xl rounded-xl`}>
               <Text style={tw`text-2xl text-center mb-3 font-bold`}>
-                ANSWERS
+                {t("wordsearch_answers")}
               </Text>
               {words}
             </View>

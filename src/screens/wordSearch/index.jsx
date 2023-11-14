@@ -21,12 +21,13 @@ import Menu from "../../components/menu";
 import Shadow from "../../components/shadow";
 import CrosswordInitial from "../../components/crossword/CrosswordInitial";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useTranslation} from "react-i18next";
 
 const cellSize = 30;
 const boardSize = crosswords.length;
-const buttons = ["Answer", "Reset"];
 
 const WordSearch = ({navigation, route}) => {
+  const {t} = useTranslation();
   const [selectedWord, setSelectedWord] = useState("");
   const [foundWords, setFoundWords] = useState([]);
   const [wordsCoords, setWordsCoords] = useState([]);
@@ -191,7 +192,7 @@ const WordSearch = ({navigation, route}) => {
   };
 
   const selectedStyle = getWordStyle(letterIndexes, cellSize, isReversedLine);
-  const questionButtons = buttons.map((item, index) => (
+  const questionButtons = [...Array(2)].map((item, index) => (
     <TouchableOpacity
       key={`question-button-${index}`}
       activeOpacity={0.5}
@@ -199,11 +200,14 @@ const WordSearch = ({navigation, route}) => {
       style={tw`rounded-2xl bg-white p-2 px-8 h-11 mb-1 `}>
       <Text
         style={tw` font-semibold text-[#00095D] text-lg uppercase text-center`}>
-        {item}
+        {index == 0
+          ? t("wordsearch_button_answer")
+          : t("wordsearch_button_reset")}
       </Text>
     </TouchableOpacity>
   ));
   const showInitialScreen = !isVisitedScreen && !isStartCrossword;
+
   return (
     <SafeAreaView>
       {showInitialScreen && <CrosswordInitial onPress={onPress} />}
