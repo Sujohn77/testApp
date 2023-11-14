@@ -44,6 +44,7 @@
     "react-native-webview": "^13.6.2",
     "react-query": "^3.39.3",
     "react-scripts": "^5.0.1",
+    "seedrandom": "^3.0.5",
     "twrnc": "^3.6.4"
   },
   "devDependencies": {

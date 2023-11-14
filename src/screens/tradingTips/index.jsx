@@ -34,6 +34,7 @@ import stocksImages from "../../assets/images/stocks";
 import Shadow from "../../components/shadow";
 import {data} from "./mock";
 import {useTranslation} from "react-i18next";
+import {getNewsKeys} from "../../utils";
 
 const tradingTipsImages = [
   images.tradingTips1,
@@ -62,9 +63,9 @@ const TradingTipsScreen = ({navigation}) => {
       </View>
     );
   };
-
+  const newsKeys = getNewsKeys();
   const newestTips = data
-    .filter(item => moment().isSame(item.date, "day"))
+    .filter((item, index) => newsKeys.includes(index + 1))
     .map((item, index) =>
       renderPostRow({
         title: t(`tip_title${index + 1}`),
@@ -76,7 +77,7 @@ const TradingTipsScreen = ({navigation}) => {
     );
 
   const otherTips = data
-    .filter(item => !moment().isSame(item.date, "day"))
+    .filter((item, index) => !newsKeys.includes(index + 1))
     .map((item, index) =>
       renderPostRow({
         title: t(`tip_title${index + 1}`),
@@ -104,14 +105,18 @@ const TradingTipsScreen = ({navigation}) => {
             </Text>
           </ImageBackground>
           <View style={tw`px-3 flex flex-col gap-3`}>
-            <View>
-              <Text style={tw`text-lg text-black`}>{t("tips_newest")}</Text>
-              <View style={tw`mt-3`}>{newestTips}</View>
-            </View>
-            <View>
-              <Text style={tw`text-lg text-black`}>{t("tips_oldest")}</Text>
-              <View style={tw`mt-3`}>{otherTips}</View>
-            </View>
+            {newestTips.length && (
+              <View>
+                <Text style={tw`text-lg text-black`}>{t("tips_newest")}</Text>
+                <View style={tw`mt-3`}>{newestTips}</View>
+              </View>
+            )}
+            {otherTips.length && (
+              <View>
+                <Text style={tw`text-lg text-black`}>{t("tips_oldest")}</Text>
+                <View style={tw`mt-3`}>{otherTips}</View>
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>

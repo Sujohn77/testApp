@@ -47,12 +47,12 @@ const WelcomeScreen = ({navigation}) => {
             source={welcomeSlides[step].image}
             style={tw`h-[350px] w-full mb-5`}
           />
-          <Text style={tw`text-white text-4xl font-semibold ml-[30px] mt-2`}>
+          <Text style={tw`text-white text-4xl font-semibold mx-[30px] mt-2`}>
             {t(`welcome_slide${step + 1}`)}
           </Text>
         </View>
         <View
-          style={tw`flex flex-row justify-between items-center absolute bottom-40 w-full`}>
+          style={tw`flex flex-row justify-between items-center absolute bottom-20 w-full`}>
           <View style={tw`flex flex-row gap-[2px] ml-[30px]`}>
             {[...Array(3)].map((item, index) => (
               <View

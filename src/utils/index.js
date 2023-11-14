@@ -1,5 +1,6 @@
 import moment from "moment";
 import {currency} from "../constants";
+import {seedrandom} from "seedrandom";
 
 export const getWordStyle = (coords, cellSize, isReverseLine = false) => {
   const length = coords.length;
@@ -21,6 +22,24 @@ export const getWordStyle = (coords, cellSize, isReverseLine = false) => {
 
 export const isQuizFirstVisit = (date = moment("2023-12-11")) => {
   return moment().isAfter(date, "day");
+};
+
+export const getNewsKeys = () => {
+  const today = new Date();
+  const seed = today.toDateString();
+  const seedValue = Array.from(seed).reduce(
+    (acc, char) => acc + char.charCodeAt(0),
+    0,
+  );
+  const seededRandom = seed => {
+    const x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  };
+
+  const randomNumber1 = Math.floor(seededRandom(seedValue) * 10) + 1;
+  const randomNumber2 = Math.floor(seededRandom(seedValue) * 10) + 1;
+
+  return [randomNumber1, randomNumber2];
 };
 
 export const selectCryptoPrices = data => {

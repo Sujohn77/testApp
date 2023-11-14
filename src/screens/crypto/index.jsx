@@ -42,7 +42,6 @@ const CryptoScreen = ({navigation}) => {
     fetchCryptoHistory({name: cryptoGraphsNames.BTC, duration: graphDuration}),
   );
   const [cryptoPrices, setCryptoPrices] = useState({});
-  const [oldCryptoPrices, setOldCryptoPrices] = useState({});
 
   useEffect(() => {
     const getCachedPrices = async () => {
@@ -50,42 +49,26 @@ const CryptoScreen = ({navigation}) => {
       !JSON.parse(prices) && setCryptoPrices(prices);
     };
 
-    const getCachedOldPrices = async () => {
-      const oldPrices = await AsyncStorage.getItem("oldCryptoPrices");
-      !JSON.parse(oldPrices) && setOldCryptoPrices(oldPrices);
-    };
-
     const getCryptoPrices = async () => {
       const cryptoPrices = await Promise.all(
         cryptoIds.map(name => fetchCryptoByDate({name})),
       );
-      const oldDate = moment().subtract(1, "days").format("DD-MM-YYYY");
 
-      const cryptoPricesDurationAgo = await Promise.all(
-        cryptoIds.map(name => fetchCryptoByDate({name, date: oldDate})),
-      );
       const updatedNewPrices = selectCryptoPrices(cryptoPrices);
-      const updatedOldPrices = selectCryptoPrices(cryptoPricesDurationAgo);
+
       const updatedCryptoLength = Object.keys(updatedNewPrices).length;
-      const updatedOldCryptoLength = Object.keys(updatedOldPrices).length;
+
       const stateCryptoPricesLength = Object.keys(cryptoPrices).length;
-      const stateOldCryptoPricesLength = Object.keys(oldCryptoPrices).length;
+
       const lastUpdatedCrypto =
         updatedCryptoLength >= cryptoIds.length - 1
           ? updatedNewPrices[Object.keys(updatedNewPrices)[0]]
-          : {};
-      const firstOldDateCrypto =
-        updatedOldCryptoLength > 0
-          ? updatedOldPrices[Object.keys(updatedOldPrices)[0]]
           : {};
 
       // set caches if there was reached rate limit for api requests
       const isLoadCachedPrices =
         (!lastUpdatedCrypto?.price && !stateCryptoPricesLength) ||
         !updatedCryptoLength;
-      const isLoadCachedOldPrices =
-        (!firstOldDateCrypto?.price && !stateOldCryptoPricesLength) ||
-        !updatedOldCryptoLength;
 
       if (isLoadCachedPrices) {
         getCachedPrices();
@@ -93,15 +76,6 @@ const CryptoScreen = ({navigation}) => {
         setCryptoPrices(updatedNewPrices);
         const value = JSON.stringify(updatedNewPrices);
         updatedCryptoLength && AsyncStorage.setItem("cryptoPrices", value);
-      }
-      if (isLoadCachedOldPrices) {
-        getCachedOldPrices();
-      } else {
-        setOldCryptoPrices(updatedOldPrices);
-
-        const value = JSON.stringify(updatedOldPrices);
-        updatedOldCryptoLength &&
-          AsyncStorage.setItem("oldCryptoPrices", value);
       }
     };
 
@@ -153,17 +127,18 @@ const CryptoScreen = ({navigation}) => {
                   item.price > 1
                     ? item.price?.toFixed(2)
                     : item.price?.toFixed(4);
-                const yesterdayPrice = oldCryptoPrices[key]
+                {
+                  /* const yesterdayPrice = oldCryptoPrices[key]
                   ? oldCryptoPrices[key].price
                   : null;
                 const percentageDiff = yesterdayPrice
                   ? (item.price / yesterdayPrice - 1) * 100
-                  : "";
+                  : ""; */
+                }
 
-                const isGrowth = percentageDiff > 0;
-                const percentageSign = isGrowth ? "+" : "";
-                if (!yesterdayPrice) {
-                  return null;
+                {
+                  /* const isGrowth = percentageDiff > 0;
+                const percentageSign = isGrowth ? "+" : ""; */
                 }
                 return (
                   <View
@@ -188,7 +163,7 @@ const CryptoScreen = ({navigation}) => {
                         <Text style={tw`text-slate-500 text-xs`}>
                           {top25Cryptos[key]?.subTitle}
                         </Text>
-                        {yesterdayPrice ? (
+                        {/* {yesterdayPrice ? (
                           <Text
                             style={tw`${
                               isGrowth ? "text-lime-500" : "text-rose-300"
@@ -196,7 +171,7 @@ const CryptoScreen = ({navigation}) => {
                             {percentageSign}
                             {percentageDiff?.toFixed(2)}%
                           </Text>
-                        ) : null}
+                        ) : null} */}
                       </View>
                     </View>
                   </View>
