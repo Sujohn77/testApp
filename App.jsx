@@ -62,7 +62,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
         <Tab.Navigator
-          initialRouteName={!isVisitedWelcome ? "Stocks" : "Welcome"}
+          initialRouteName={isVisitedWelcome ? "WelcomeQuiz" : "Welcome"}
           tabBar={Menu}
           screenOptions={{
             headerShown: false,
