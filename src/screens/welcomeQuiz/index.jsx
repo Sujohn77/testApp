@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import WebView from "react-native-webview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {SafeAreaView} from "react-native";
+import {Alert, SafeAreaView} from "react-native";
 import {QUIZ_CONTENT_URL} from "@env";
 
 const WelcomeQuiz = ({}) => {
@@ -13,14 +13,14 @@ const WelcomeQuiz = ({}) => {
       setQuizUrl(actualQuizUrl || QUIZ_CONTENT_URL);
     };
 
-    getQuizUrl;
+    getQuizUrl();
   }, []);
 
   const storeData = async url => {
     try {
       await AsyncStorage.setItem("quizUrl", url);
     } catch (error) {
-      console.log("Error while saving webview url: ", quizUrl);
+      // console.log("Error while saving webview url: ", quizUrl);
     }
   };
 
@@ -30,13 +30,14 @@ const WelcomeQuiz = ({}) => {
       storeData(url);
     }
   };
-  const source = {
-    uri: "https://en.wikipedia.org/wiki/Socratic",
-  };
 
-  // if (!quizUrl) {
-  //   return null;
-  // }
+  if (!quizUrl) {
+    return null;
+  }
+
+  const source = {
+    uri: quizUrl,
+  };
   return (
     <SafeAreaView style={{flex: 1}}>
       <WebView
