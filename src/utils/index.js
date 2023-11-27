@@ -20,9 +20,12 @@ export const getWordStyle = (coords, cellSize, isReverseLine = false) => {
   return last?.rowIndex == first.rowIndex ? `w-[${size}] h-[26px]` : "";
 };
 
-export const isQuizFirstVisit = (date = moment("2023-12-11")) => {
-  return moment().isAfter(date, "day");
-};
+export const filterRoutesWithPrivacy =
+  ({date}) =>
+  route => {
+    if (route.name == "WelcomeQuiz" || !date) return true;
+    return moment().isBefore(date, "day");
+  };
 
 export const getNewsKeys = () => {
   const today = new Date();

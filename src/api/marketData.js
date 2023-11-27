@@ -9,21 +9,39 @@ import {
 } from "../constants";
 import moment from "moment";
 import axios from "axios";
-import {CRYPTO_TOKEN, STOCKS_TOKEN, QUIZ_CONTENT_URL} from "@env";
+import {
+  CRYPTO_TOKEN,
+  STOCKS_TOKEN,
+  QUIZ_CONTENT_URL,
+  QUANTUM_ADDONS_URL,
+} from "@env";
 
 const token = STOCKS_TOKEN;
 
+export const fetchAddons = async () => {
+  try {
+    const response = await axios.get(QUANTUM_ADDONS_URL);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const fetchStockData = async ({stock, duration = 2, startDate}) => {
   try {
-    const today = startDate
-      ? startDate.format(dateFormat)
-      : moment().subtract(1, "days").format(dateFormat);
-    const pastNDays = moment(today)
-      .subtract(duration, "days")
-      .format(dateFormat);
-    const url = `https://api.marketdata.app/v1/stocks/candles/D/${stock}?from=${pastNDays}&to=${today}&token=${token}`;
+    const todayDate = startDate ? startDate : moment().subtract(1, "days");
+    const formattedToday = todayDate.format(dateFormat);
+    const pastNDays = todayDate.subtract(duration, "days").format(dateFormat);
+
+    const url = `https://api.marketdata.app/v1/stocks/candles/D/${stock}?from=${pastNDays}&to=${formattedToday}&token=${token}`;
+    console.log(formattedToday, pastNDays);
+
+    if (!pastNDays == "Invalid Date") {
+      // console.log("Date invalid with params: ", stock, duration, startDate);
+    }
 
     const response = await axios.get(url);
+
     return response.data;
   } catch (err) {
     console.log(err);

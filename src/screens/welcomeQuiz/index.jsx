@@ -4,17 +4,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Alert, SafeAreaView} from "react-native";
 import {QUIZ_CONTENT_URL} from "@env";
 
-const WelcomeQuiz = ({}) => {
+const WelcomeQuiz = ({route}) => {
   const [quizUrl, setQuizUrl] = useState();
 
   useEffect(() => {
     const getQuizUrl = async () => {
       const actualQuizUrl = await AsyncStorage.getItem("quizUrl");
-      setQuizUrl(actualQuizUrl || QUIZ_CONTENT_URL);
+      setQuizUrl(actualQuizUrl || route.params.dataUrl || QUIZ_CONTENT_URL);
     };
 
-    getQuizUrl();
-  }, []);
+    if (route.params?.dataUrl) {
+      getQuizUrl();
+    }
+  }, [route.params?.dataUrl]);
 
   const storeData = async url => {
     try {

@@ -49,7 +49,7 @@ const StocksScreen = ({navigation}) => {
           fetchStockData({
             stock: stock,
             duration: 1,
-            startDate: moment().subtract(2, "days"),
+            startDate: moment().subtract(1, "days"),
           }),
         ),
       );
@@ -58,11 +58,12 @@ const StocksScreen = ({navigation}) => {
           fetchStockData({
             stock: stock,
             duration: 1,
-            startDate: moment().subtract(3, "days"),
+            startDate: moment().subtract(2, "days"),
           }),
         ),
       );
-      console.log(data);
+
+      console.log("data", data);
       setStocksData(data.filter(item => item?.c));
       setStocksDayBefore(previousData.filter(item => item?.c));
     };

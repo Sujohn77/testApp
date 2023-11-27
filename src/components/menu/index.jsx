@@ -16,7 +16,8 @@ const navLinks = {
 
 export const excludeRoutes = ["StocksPost", "TradingTipsPost", "Welcome"];
 
-const Menu = ({state, navigation}) => {
+const Menu = ({state, navigation, showNav}) => {
+  if (!showNav) return null;
   const navigate = name => {
     navigation.navigate(name);
   };
