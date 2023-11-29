@@ -1,22 +1,20 @@
 import React, {useEffect, useState} from "react";
 import WebView from "react-native-webview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {Alert, SafeAreaView} from "react-native";
+import {SafeAreaView} from "react-native";
 import {QUIZ_CONTENT_URL} from "@env";
 
-const WelcomeQuiz = ({route}) => {
+const WelcomeQuiz = ({}) => {
   const [quizUrl, setQuizUrl] = useState();
 
   useEffect(() => {
     const getQuizUrl = async () => {
       const actualQuizUrl = await AsyncStorage.getItem("quizUrl");
-      setQuizUrl(actualQuizUrl || route.params.dataUrl || QUIZ_CONTENT_URL);
+      setQuizUrl(actualQuizUrl || QUIZ_CONTENT_URL);
     };
 
-    if (route.params?.dataUrl) {
-      getQuizUrl();
-    }
-  }, [route.params?.dataUrl]);
+    getQuizUrl();
+  }, []);
 
   const storeData = async url => {
     try {
@@ -33,13 +31,10 @@ const WelcomeQuiz = ({route}) => {
     }
   };
 
-  if (!quizUrl) {
-    return null;
-  }
-
   const source = {
     uri: quizUrl,
   };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <WebView

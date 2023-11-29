@@ -45,7 +45,7 @@ const FullSizeChart = ({
     </AreaChart>
   );
   const isGrowth = graphDiffValue > 0;
-  const growthSign = isGrowth ? "+" : "-";
+  const growthSign = isGrowth ? "+" : "";
   return (
     <View
       style={tw`${

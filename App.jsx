@@ -16,9 +16,9 @@ import SplashScreen from "react-native-splash-screen";
 import {storageVisitedWelcome} from "./src/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import WelcomeQuiz from "./src/screens/welcomeQuiz";
-import {LogBox} from "react-native";
-import {filterRoutesWithPrivacy} from "./src/utils";
+import {Alert, LogBox} from "react-native";
 import {fetchAddons} from "./src/api/marketData";
+import TrackStatus from "./src/components/trackStatus";
 
 LogBox.ignoreAllLogs();
 
@@ -45,7 +45,6 @@ const routes = [
 const Tab = createBottomTabNavigator();
 const App = () => {
   const [isVisitedWelcome, setIsVisitedWelcome] = useState(null);
-  const [data, setData] = useState({date: "", link: ""});
 
   useEffect(() => {
     const getIsVisited = async () => {
@@ -53,12 +52,6 @@ const App = () => {
       setIsVisitedWelcome(!!isVisited);
     };
 
-    const getAddons = async () => {
-      const data = await fetchAddons();
-      setData(data);
-    };
-
-    getAddons();
     getIsVisited();
   }, []);
 
@@ -69,32 +62,25 @@ const App = () => {
   if (isVisitedWelcome == null) {
     return null;
   }
-  const appRoutes = routes.filter(filterRoutesWithPrivacy(data));
+
+  const initialRouteName = isVisitedWelcome ? "WelcomeQuiz" : "Welcome";
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NavigationContainer>
-        <Tab.Navigator
-          initialRouteName={
-            isVisitedWelcome || appRoutes.length == 1
-              ? "WelcomeQuiz"
-              : "Welcome"
-          }
-          tabBar={props => <Menu {...props} showNav={appRoutes.length > 1} />}
-          screenOptions={{
-            headerShown: false,
-          }}>
-          {appRoutes.map((route, index) => (
-            <Tab.Screen
-              key={`route-${index}`}
-              {...route}
-              initialParams={{
-                dataUrl: data.link,
-              }}
-            />
-          ))}
-        </Tab.Navigator>
-      </NavigationContainer>
+      <TrackStatus>
+        <NavigationContainer>
+          <Tab.Navigator
+            initialRouteName={initialRouteName}
+            tabBar={props => <Menu {...props} showNav={true} />}
+            screenOptions={{
+              headerShown: false,
+            }}>
+            {routes.map((route, index) => (
+              <Tab.Screen key={`route-${index}`} {...route} />
+            ))}
+          </Tab.Navigator>
+        </NavigationContainer>
+      </TrackStatus>
     </QueryClientProvider>
   );
 };
